@@ -1,0 +1,1 @@
+c:\CPP\risc-v\bin\riscv64-unknown-elf-objdump.exe "d:\!Projects\STM32-Discovery\CH32V307\Firmware\VGDB\VisualGDB\Debug\CH32V307-Test" -S > d:\!Projects\STM32-Discovery\CH32V307\Firmware\VGDB\1.lst

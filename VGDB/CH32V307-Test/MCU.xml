@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<EmbeddedProfile xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ToolchainID>d3a338e9-3c1a-4a24-8c87-2b9667bb3b2e</ToolchainID>
+  <ToolchainVersion>
+    <GCC>12.2.0</GCC>
+    <GDB>(xPack</GDB>
+    <Revision>0</Revision>
+  </ToolchainVersion>
+  <BspID>com.visualgdb.bsp.in-place</BspID>
+  <BspVersion>1.0</BspVersion>
+  <MCUProperties>
+    <Entries />
+  </MCUProperties>
+  <BSPSourceFolderName>Device-specific files</BSPSourceFolderName>
+  <InPlaceMCU>
+    <CompilationFlags>
+      <IncludeDirectories>
+        <string>../../Src/Inc</string>
+      </IncludeDirectories>
+      <CFLAGS />
+      <CXXFLAGS />
+      <LDFLAGS>-nostartfiles -specs=nano.specs -specs=nosys.specs</LDFLAGS>
+      <ASFLAGS />
+      <COMMONFLAGS>-march=rv32imafc -mabi=ilp32f</COMMONFLAGS>
+      <EnableLinkerGroups>true</EnableLinkerGroups>
+    </CompilationFlags>
+    <FLASHSize>0</FLASHSize>
+    <RAMSize>0</RAMSize>
+    <FLASHBase>4294967295</FLASHBase>
+    <RAMBase>4294967295</RAMBase>
+    <AdditionalSourcesRequiredForTesting>false</AdditionalSourcesRequiredForTesting>
+  </InPlaceMCU>
+  <MCUMakFile>mcu.mak</MCUMakFile>
+  <FrameworkProperties>
+    <Entries />
+  </FrameworkProperties>
+  <TestFrameworkProperties>
+    <Entries />
+  </TestFrameworkProperties>
+</EmbeddedProfile>
