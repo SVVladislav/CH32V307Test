@@ -50,6 +50,7 @@
       <InlineFunctions>true</InlineFunctions>
       <CLanguageStandard>GNU18</CLanguageStandard>
       <DebugInformationFormat>Dwarf4</DebugInformationFormat>
+      <LinkTimeOptimization>false</LinkTimeOptimization>
     </ClCompile>
     <Link>
       <AdditionalLinkerInputs>;%(Link.AdditionalLinkerInputs)</AdditionalLinkerInputs>

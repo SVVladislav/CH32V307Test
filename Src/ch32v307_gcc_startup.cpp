@@ -239,10 +239,12 @@ extern "C" void __attribute__((naked, noreturn)) Reset_Handler()
 #endif
   for (volatile uint32_t* pDst = _sbss; pDst != _ebss; *pDst++ = 0); // Zero -> BSS
 
-  riscv::csr::Set_MTVEC((uint32_t)__vector_table);
+  // vector table uses the absolute address of the interrupt function
+  // and the entry of the exception or interrupt is offset according to the interrupt number * 4
+  riscv::csr::Set_MTVEC((uint32_t)__vector_table + 3); //VTAB  
+  
   SystemInit();
   main();
-
   
 }
 
