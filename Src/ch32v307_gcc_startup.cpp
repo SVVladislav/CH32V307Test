@@ -9,21 +9,17 @@ extern "C" {
 int main();
 void SystemInit();
 void Reset_Handler();
+void Default_Handler();
 
-//#define __ISR__ __attribute__((interrupt()))
-
-void __attribute__((naked, section(".init"))) _start(void)
+void __attribute__((used, naked, section(".init"))) _start(void)
 {
   __asm volatile (".option push;"
 	              ".option norelax;"
 		          "la    gp, __global_pointer$;"
                   ".option pop;"
-                  "la    sp, _eusrstack;");
-
-  __asm volatile  ( "j Reset_Handler;"  );
+                  "la    sp, _eusrstack;"
+			      "j Reset_Handler;");
 }
-
-void __attribute__((section(".init"))) Default_Handler() { for (;;); }
 
 void NMI_Handler()                 __attribute__((weak, alias("Default_Handler")));
 void HardFault_Handler()           __attribute__((weak, alias("Default_Handler")));
@@ -124,7 +120,7 @@ void DMA2_Channel11_IRQHandler()   __attribute__((weak, alias("Default_Handler")
 typedef void(*intvec_elem)();
 
 const intvec_elem __vector_table[] __attribute__((used, section(".vectors"))) =
-{ &_start, NULL,
+{ //NULL, NULL,
   &NMI_Handler,
   &HardFault_Handler,
   NULL,
@@ -231,7 +227,9 @@ const intvec_elem __vector_table[] __attribute__((used, section(".vectors"))) =
 }
 #endif
 
-extern "C" void __attribute__((naked, noreturn)) Reset_Handler()
+void Default_Handler() { for (;;); }
+
+void __attribute__((used, naked, noreturn)) Reset_Handler()
 {
   extern uint32_t _sidata[], _sdata[], _edata[], _sbss[], _ebss[];
 #ifndef __DEBUG_SRAM__
@@ -240,8 +238,7 @@ extern "C" void __attribute__((naked, noreturn)) Reset_Handler()
   for (volatile uint32_t* pDst = _sbss; pDst != _ebss; *pDst++ = 0); // Zero -> BSS
 
   // vector table uses the absolute address of the interrupt function
-  // and the entry of the exception or interrupt is offset according to the interrupt number * 4
-  riscv::csr::Set_MTVEC((uint32_t)__vector_table + 3); //VTAB  
+  riscv::csr::SetMTVEC(__vector_table-2, riscv::EXCEPTIONS_MODE::VTABLE_ADDR);
   
   SystemInit();
   main();
