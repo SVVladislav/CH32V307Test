@@ -8,6 +8,7 @@
   </ToolchainVersion>
   <BspID>com.visualgdb.bsp.in-place</BspID>
   <BspVersion>1.0</BspVersion>
+  <MCUDefinitionFile>..\..\BSP\CH32V307xx.svd</MCUDefinitionFile>
   <MCUProperties>
     <Entries />
   </MCUProperties>
@@ -28,6 +29,7 @@
     <RAMSize>0</RAMSize>
     <FLASHBase>4294967295</FLASHBase>
     <RAMBase>4294967295</RAMBase>
+    <MCUDefinitionFile>..\..\BSP\CH32V307xx.svd</MCUDefinitionFile>
     <AdditionalSourcesRequiredForTesting>false</AdditionalSourcesRequiredForTesting>
   </InPlaceMCU>
   <MCUMakFile>mcu.mak</MCUMakFile>

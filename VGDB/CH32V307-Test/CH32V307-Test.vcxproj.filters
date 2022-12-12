@@ -9,6 +9,9 @@
       <UniqueIdentifier>{93eff3ae-c973-48de-ae47-9eee6c05e815}</UniqueIdentifier>
       <Extensions>vgdbsettings</Extensions>
     </Filter>
+    <Filter Include="Source files\Device-specific files">
+      <UniqueIdentifier>{d54de4ce-117c-49da-9f94-89a2f42bbdb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="CH32V307-Test-Debug.vgdbsettings">
