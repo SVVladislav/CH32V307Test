@@ -129,20 +129,6 @@ uint32_t __get_MSTATUS(void)
 }
 
 /*********************************************************************
- * @fn      __set_MSTATUS
- *
- * @brief   Set the Machine Status Register
- *
- * @param   value  - set mstatus value
- *
- * @return  none
- */
-void __set_MSTATUS(uint32_t value)
-{
-  __ASM volatile ("csrw mstatus, %0" : : "r" (value) );
-}
-
-/*********************************************************************
  * @fn      __get_MISA
  *
  * @brief   Return the Machine ISA Register

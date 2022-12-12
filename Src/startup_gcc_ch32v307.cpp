@@ -13,12 +13,11 @@ void Default_Handler();
 
 void __attribute__((used, naked, section(".init"))) _start(void)
 {
-  __asm volatile (".option push;"
-	              ".option norelax;"
-		          "la    gp, __global_pointer$;"
-                  ".option pop;"
-                  "la    sp, _eusrstack;"
-			      "j Reset_Handler;");
+  extern uint32_t __global_pointer$;
+  extern uint32_t _eusrstack;
+  riscv::SetGP(&__global_pointer$);
+  riscv::SetSP(&_eusrstack);
+  __asm volatile ("j Reset_Handler;");
 }
 
 void NMI_Handler()                 __attribute__((weak, alias("Default_Handler")));
@@ -231,6 +230,8 @@ void Default_Handler() { for (;;); }
 
 void __attribute__((used, naked, noreturn)) Reset_Handler()
 {
+  SystemInit();
+  
   extern uint32_t _sidata[], _sdata[], _edata[], _sbss[], _ebss[];
 #ifndef __DEBUG_SRAM__
   for (volatile uint32_t* pSrc = _sidata, *pDst = _sdata; pDst != _edata; *pDst++ = *pSrc++);
@@ -240,9 +241,11 @@ void __attribute__((used, naked, noreturn)) Reset_Handler()
   // vector table uses the absolute address of the interrupt function
   riscv::csr::SetMTVEC(__vector_table-2, riscv::EXCEPTIONS_MODE::VTABLE_ADDR);
   
-  SystemInit();
-  main();
+  // Enable floating point and interrupt 
+  //riscv::csr::SetMSTATUS(0x6088);
   
+  main();
+
 }
 
 

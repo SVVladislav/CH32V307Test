@@ -6,6 +6,7 @@
 
 int main()
 {
+  __enable_irq();
   for (;;);
 }
 
