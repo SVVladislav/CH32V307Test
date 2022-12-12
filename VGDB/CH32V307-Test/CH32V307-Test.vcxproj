@@ -87,9 +87,9 @@
     <Xml Include="MCU.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\ch32v307_gcc_startup.cpp" />
     <ClCompile Include="..\..\Src\low_level_init.cpp" />
     <ClCompile Include="..\..\Src\main.cpp" />
+    <ClCompile Include="..\..\Src\startup_gcc_ch32v307.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
