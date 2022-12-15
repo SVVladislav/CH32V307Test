@@ -2,16 +2,38 @@
 
 #include <cstdint>
 
+namespace riscv
+{
+#if __riscv_xlen==32 
+    using uint_xlen_t = std::uint32_t;
+    using uint_csr32_t = std::uint32_t;
+    using uint_csr64_t = std::uint32_t;
+#elif __riscv_xlen==64
+    using uint_xlen_t = std::uint64_t;
+    using uint_csr32_t = std::uint32_t;
+    using uint_csr64_t = std::uint64_t;
+#else
+    using uint_xlen_t = std::uint32_t;
+    using uint_csr32_t = std::uint32_t;
+    using uint_csr64_t = std::uint32_t;
+#error "riscv::csr: unknown __riscv_xlen"
+#endif
+}
+
+#include "risc-v-csr.hpp"
+
 static inline void __NOP() { __asm volatile ("nop"); }
 
 static inline void __enable_irq()
 {
-  __asm volatile ("csrw 0x800, %0" : : "r" (0x6088));  //??? 0x88 ? 
+  //__asm volatile ("csrsi mstatus, 0x8");
+  riscv::CSR<0x800>::set_bits<0x08>(); // Vendor defined "gintenr" CSR 
 }
 
 static inline void __disable_irq()
 {
-    __asm volatile ("csrw 0x800, %0" : : "r" (0x6000));
+  //__asm volatile ("csrci mstatus, 0x8");
+  riscv::CSR<0x800>::clear_bits<0x08>(); // Vendor defined "gintenr" CSR 
 }
 
 namespace riscv 

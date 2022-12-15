@@ -54,6 +54,14 @@
     <PostDebugActions />
     <DebugStopActions />
     <BreakMode>Default</BreakMode>
+    <CustomBreakCommand>
+      <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <RemoteHost>
+        <HostName>BuildMachine</HostName>
+        <Transport>BuiltinShortcut</Transport>
+      </RemoteHost>
+      <BackgroundMode xsi:nil="true" />
+    </CustomBreakCommand>
   </CustomDebug>
   <CustomShortcuts>
     <Shortcuts />
@@ -76,7 +84,15 @@
   <Configurations />
   <ProgramArgumentsSuggestions />
   <Debug xsi:type="com.visualgdb.debug.embedded">
-    <AdditionalStartupCommands />
+    <AdditionalStartupCommands>
+      <GDBPreStartupCommands />
+      <GDBStartupCommands>
+        <string>mon reset init</string>
+        <string>mon load_image d:\\!Projects\\STM32-Discovery\\CH32V307\\Firmware\\VGDB\\VisualGDB\\Debug\\CH32V307-Test.bin 0x20000000</string>
+        <string>mon reg pc 0x20000000</string>
+      </GDBStartupCommands>
+      <GDBFinalizationCommands />
+    </AdditionalStartupCommands>
     <AdditionalGDBSettings>
       <Features>
         <DisableAutoDetection>false</DisableAutoDetection>
@@ -94,13 +110,13 @@
       <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
       <UseAppleExtensions>false</UseAppleExtensions>
       <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
-      <MakeLogFile>false</MakeLogFile>
+      <MakeLogFile>true</MakeLogFile>
       <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
       <UseRelativePathsOnly>false</UseRelativePathsOnly>
-      <ExitAction>None</ExitAction>
+      <ExitAction>Disconnect</ExitAction>
       <DisableDisassembly>false</DisableDisassembly>
       <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
-      <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
+      <StepIntoNewInstanceEntry>_start</StepIntoNewInstanceEntry>
       <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
       <DisableSignals>false</DisableSignals>
       <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
@@ -108,62 +124,74 @@
       <TemporaryBreakConsolidationTimeout>0</TemporaryBreakConsolidationTimeout>
       <EnableNonStopMode>false</EnableNonStopMode>
       <MaxBreakpointLimit>0</MaxBreakpointLimit>
-      <EnableVerboseMode>true</EnableVerboseMode>
+      <EnableVerboseMode>false</EnableVerboseMode>
       <EnablePrettyPrinters>false</EnablePrettyPrinters>
     </AdditionalGDBSettings>
     <DebugMethod>
-      <ID>com.visualgdb.fullcustom</ID>
+      <ID>com.visualgdb.customstub</ID>
       <Configuration>
         <Entries>
           <KeyValue>
-            <Key>com.visualgdb.dbgfallback.GDBArgs</Key>
-            <Value>--interpreter mi $(TargetPath)</Value>
-          </KeyValue>
-          <KeyValue>
-            <Key>com.visualgdb.dbgfallback.GDBDir</Key>
-          </KeyValue>
-          <KeyValue>
-            <Key>com.visualgdb.dbgfallback.GDBEnv</Key>
-            <Value />
-          </KeyValue>
-          <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubEXE</Key>
+            <Value>openocd.exe</Value>
           </KeyValue>
           <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubArgs</Key>
+            <Value>-f wch-riscv.cfg</Value>
           </KeyValue>
           <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubDir</Key>
+            <Value>c:\CPP\OpenOCD-WCH\bin</Value>
           </KeyValue>
           <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubEnv</Key>
+            <Value />
+          </KeyValue>
+          <KeyValue>
+            <Key>com.visualgdb.dbgfallback.GDBStubPort</Key>
+            <Value>3333</Value>
           </KeyValue>
           <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubStartupDelay</Key>
+            <Value>2000</Value>
+          </KeyValue>
+          <KeyValue>
+            <Key>com.visualgdb.dbgfallback.GDBStubEraseCmd</Key>
+            <Value />
+          </KeyValue>
+          <KeyValue>
+            <Key>com.visualgdb.dbgfallback.GDBStubProgramCmd</Key>
+            <Value />
+          </KeyValue>
+          <KeyValue>
+            <Key>com.visualgdb.dbgfallback.UseCtrlBreak</Key>
             <Value>0</Value>
           </KeyValue>
           <KeyValue>
-            <Key>com.visualgdb.dbgfallback.TargetSelectCmd</Key>
-          </KeyValue>
-          <KeyValue>
-            <Key>com.visualgdb.dbgfallback.DebugStartCmd</Key>
-            <Value>-exec-run</Value>
+            <Key>com.visualgdb.dbgfallback.SendBreaksToGDBStub</Key>
+            <Value>0</Value>
           </KeyValue>
         </Entries>
       </Configuration>
     </DebugMethod>
-    <AutoDetectRTOS>true</AutoDetectRTOS>
-    <SemihostingSupport>Auto</SemihostingSupport>
+    <AutoDetectRTOS>false</AutoDetectRTOS>
+    <SemihostingSupport>Disabled</SemihostingSupport>
     <SemihostingPollingDelay>0</SemihostingPollingDelay>
-    <StepIntoEntryPoint>false</StepIntoEntryPoint>
+    <StepIntoEntryPoint>true</StepIntoEntryPoint>
     <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>
-    <ValidateEndOfStackAddress>true</ValidateEndOfStackAddress>
+    <ValidateEndOfStackAddress>false</ValidateEndOfStackAddress>
     <StopAtEntryPoint>false</StopAtEntryPoint>
     <EnableVirtualHalts>false</EnableVirtualHalts>
     <DynamicAnalysisSettings />
     <EndOfStackSymbol>_estack</EndOfStackSymbol>
     <TimestampProviderTicksPerSecond>0</TimestampProviderTicksPerSecond>
     <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
+    <CodeCoverage>
+      <EnableLiveCoverage>false</EnableLiveCoverage>
+      <CreateCoverageReports>false</CreateCoverageReports>
+      <UpdateInterval>500</UpdateInterval>
+      <CoverageReportDirectory>$(ProjectDir)\CoverageReports</CoverageReportDirectory>
+    </CodeCoverage>
     <UnusedStackFillPattern xsi:nil="true" />
     <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
   </Debug>

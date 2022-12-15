@@ -4,13 +4,23 @@
 
 #define __interrupt extern "C" void __attribute__((naked))
 
+volatile uint32_t x;
+
 int main()
 {
-  __enable_irq();
-  for (;;);
-}
 
-volatile uint32_t x;
+//  __enable_irq();
+	LED1::On();
+	LED2::On();
+
+  for (;;)
+  {
+	__enable_irq();
+	__NOP();
+	__disable_irq();
+	__NOP();
+  };
+}
 
 __interrupt SysTick_Handler()
 {
