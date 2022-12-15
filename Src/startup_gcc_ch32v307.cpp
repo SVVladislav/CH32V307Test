@@ -15,6 +15,7 @@ void __attribute__((used, naked, section(".init"))) _start(void)
 {
   extern uint32_t __global_pointer$;
   extern uint32_t _eusrstack;
+  //__disable_irq();
   riscv::SetGP(&__global_pointer$);
   riscv::SetSP(&_eusrstack);
   __asm volatile ("j Reset_Handler;");
@@ -239,7 +240,7 @@ void __attribute__((used, naked, noreturn)) Reset_Handler()
   for (volatile uint32_t* pDst = _sbss; pDst != _ebss; *pDst++ = 0); // Zero -> BSS
 
   // vector table uses the absolute address of the interrupt function
-  riscv::csr::SetMTVEC(__vector_table-2, riscv::EXCEPTIONS_MODE::VTABLE_ADDR);
+  riscv::SetMTVEC(__vector_table-2, riscv::EXCEPTIONS_MODE::VTABLE_ADDR);
   
   // Enable floating point and interrupt 
   //riscv::csr::SetMSTATUS(0x6088);

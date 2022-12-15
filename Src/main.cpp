@@ -15,10 +15,7 @@ int main()
 
   for (;;)
   {
-	__enable_irq();
-	__NOP();
-	__disable_irq();
-	__NOP();
+
   };
 }
 

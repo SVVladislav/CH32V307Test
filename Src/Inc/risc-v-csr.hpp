@@ -5,10 +5,10 @@ namespace riscv
 
   // Volume I : RISC-V User-Level ISA V2.2
   // 2.8 Control and Status Register Instructions
-  template <uint32_t csr>
+  template <CSR_REGS csr>
   struct CSR 
   {
-    static_assert(csr <= 0xFFF, "Wrong CSR");
+    // static_assert(csr <= 0xFFF, "Wrong CSR");
 
     static constexpr uint_xlen_t CSR_IMM_OP_MASK = 0x01F;
 
@@ -50,25 +50,14 @@ namespace riscv
       return ret_value;
     }
 
-    // RV32I Atomic Write CSR
-    static void write(uint_xlen_t new_value)
-    {
-      __asm volatile ("csrw    %0, %1"
-                      : 
-                      : "i" (csr),        // input : csr %1
-                        "r" (new_value)   // input : register %2
-                      :                   // clobbers: none 
-                     );
-    }
-
     // RV32I Atomic Write CSR immediate
-    static void write_imm(uint_xlen_t new_value)
+    static void write_imm(uint_xlen_t value)
     {
       __asm volatile ("csrwi    %0, %1"
                       :
-                      : "i" (csr),        // input : csr %1
-                        "K" (new_value)   // input : immediate %2
-                      :                   // clobbers: none 
+                      : "i" (csr),    // input : csr %1
+                        "K" (value)   // input : immediate %2
+                      :               // clobbers: none 
                      );
     }
 
@@ -76,12 +65,12 @@ namespace riscv
     static inline uint_xlen_t read_set_bits(uint_xlen_t mask)
     {
       uint_xlen_t prev_value;
-      __asm__ volatile ("csrrs    %0, %1, %2"
-                        : "=r" (prev_value) // output: register %0
-                        : "i" (csr),        // input : csr %1
-                          "r" (mask)        // input : register %2
-                        :                   // clobbers: none 
-                       );
+      __asm volatile ("csrrs    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "r" (mask)        // input : register %2
+                      :                   // clobbers: none 
+                     );
       return prev_value;
     }
 
@@ -89,12 +78,12 @@ namespace riscv
     static inline uint_xlen_t read_set_bits_imm(uint_xlen_t mask)
     {
       uint_xlen_t prev_value;
-      __asm__ volatile ("csrrsi    %0, %1, %2"
-                        : "=r" (prev_value) // output: register %0
-                        : "i" (csr),        // input : csr %1
-                          "K" (mask)        // input : immediate %2
-                        :                   // clobbers: none 
-                       );
+      __asm volatile ("csrrsi    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "K" (mask)        // input : immediate %2
+                      :                   // clobbers: none 
+                     );
       return prev_value;
     }
 
@@ -102,12 +91,12 @@ namespace riscv
     static inline uint_xlen_t read_clear_bits(uint_xlen_t mask)
   	{
       uint_xlen_t prev_value;
-      __asm__ volatile ("csrrc    %0, %1, %2"
-                        : "=r" (prev_value) // output: register %0
-                        : "i" (csr),        // input : csr %1
-                          "r" (mask)        // input : register %2
-                        :                   // clobbers: none 
-                       );
+      __asm volatile ("csrrc    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "r" (mask)        // input : register %2
+                      :                   // clobbers: none 
+                     );
       return prev_value;
     }
 
@@ -115,56 +104,65 @@ namespace riscv
     static inline uint_xlen_t read_clear_bits_imm(uint_xlen_t mask)
     {
       uint_xlen_t prev_value;
-      __asm__ volatile ("csrrci    %0, %1, %2"
-                        : "=r" (prev_value) // output: register %0
-                        : "i" (csr),        // input : csr %1
-                          "K" (mask)        // input : immediate %2
-                        :                   // clobbers: none 
-                       );
+      __asm volatile ("csrrci    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "K" (mask)        // input : immediate %2
+                      :                   // clobbers: none 
+                     );
       return prev_value;
     }
 
     // RV32I Atomic Set Bits in CSR
     static inline void set_bits(uint_xlen_t mask)
     {
-      __asm__ volatile ("csrs    %0, %1"
-                        : 
-                        : "i" (csr),        // input : csr %0
-                          "r" (mask)        // input : register %1
-                        :                   // clobbers: none 
-            );
+      __asm volatile ("csrs    %0, %1"
+                      : 
+                      : "i" (csr),        // input : csr %0
+                        "r" (mask)        // input : register %1
+                      :                   // clobbers: none 
+                     );
     }
 
     // RV32I Atomic Set Bits in CSR immediate
     static inline void set_bits_imm(uint_xlen_t mask)
     {
-        __asm__ volatile ("csrsi    %0, %1"
-                          :
-                          : "i" (csr),        // input : csr %0
-                            "K" (mask)        // input : immediate %1
-                          :                   // clobbers: none 
-                         );
-    }
-    // RV32I Atomic Clear Bits in CSR
-    static inline void clear_bits(uint_xlen_t mask)
-    {
-      __asm__ volatile ("csrc    %0, %1"
-                        :
-                        : "i" (csr),        // input : csr %0
-                          "r" (mask)        // input : register %1
-                        :                   // clobbers: none 
-                       );
-    }
-
-    // RV32I Atomic Clear Bits in CSR immediate
-    static inline void clear_bits_imm(uint_xlen_t mask)
-    {
-      __asm__ volatile ("csrci    %0, %1"
+        __asm volatile ("csrsi    %0, %1"
                         :
                         : "i" (csr),        // input : csr %0
                           "K" (mask)        // input : immediate %1
                         :                   // clobbers: none 
                        );
+    }
+    // RV32I Atomic Clear Bits in CSR
+    static inline void clear_bits(uint_xlen_t mask)
+    {
+      __asm volatile ("csrc    %0, %1"
+                      :
+                      : "i" (csr),        // input : csr %0
+                        "r" (mask)        // input : register %1
+                      :                   // clobbers: none 
+                     );
+    }
+
+    // RV32I Atomic Clear Bits in CSR immediate
+    static inline void clear_bits_imm(uint_xlen_t mask)
+    {
+      __asm volatile ("csrci    %0, %1"
+                      :
+                      : "i" (csr),        // input : csr %0
+                        "K" (mask)        // input : immediate %1
+                      :                   // clobbers: none 
+                     );
+    }
+
+    template <uint_xlen_t MASK=0xFFFF'FFFF>
+    static void write(uint_xlen_t value)
+    {
+        if constexpr ((MASK & ~CSR_IMM_OP_MASK) == 0)
+          write_imm(value);
+        else
+          write_(value);
     }
 
     template <uint_xlen_t MASK>
@@ -183,6 +181,18 @@ namespace riscv
         clear_bits_imm(MASK);
       else
         clear_bits(MASK);
+    }
+
+  private:
+    // RV32I Atomic Write CSR
+    static void write_(uint_xlen_t value)
+    {
+      __asm volatile ("csrw    %0, %1"
+                      :
+                      : "i" (csr),    // input : csr %1
+                        "r" (value)   // input : register %2
+                      :               // clobbers: none 
+                     );
     }
 
   };
