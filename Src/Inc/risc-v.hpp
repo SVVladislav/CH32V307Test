@@ -38,7 +38,7 @@ namespace riscv
     corecfgr = 0xBC0   // MRW Microprocessor configuration register
   };
 
-}
+} // namespace riscv
 
 #include "risc-v-csr.hpp"
 
@@ -54,6 +54,21 @@ static inline void __disable_irq()
 {
   //riscv::CSR<riscv::CSR_REGS::mstatus>::clear_bits<0x08>();
   riscv::CSR<riscv::CSR_REGS::gintenr>::clear_bits<0x08>(); // Vendor defined "gintenr" CSR
+}
+
+static inline void NVIC_EnableIRQ(IRQn_Type IRQn)
+{
+  NVIC->IENR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+}
+
+static inline void NVIC_DisableIRQ(IRQn_Type IRQn)
+{
+  NVIC->IRER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+}
+
+static inline uint32_t NVIC_GetStatusIRQ(IRQn_Type IRQn)
+{
+    return((uint32_t)((NVIC->ISR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F))) ? 1 : 0));
 }
 
 namespace riscv 
@@ -87,9 +102,64 @@ namespace riscv
     CSR<CSR_REGS::mtvec>::write(value);
   }
 
-  static inline void SetMSTATUS(uint_xlen_t value)
+  enum class MSTATUS_FS // Floating-point unit status
   {
-    CSR<CSR_REGS::mstatus>::write(value);
+	Off = 0,
+    Initial = 1<<13,
+    Clean = 2<<13,
+    Dirty = 3<<13
+  };
+
+  enum class MSTATUS_MIE  // Machine mode interrupt enable
+  {
+	Enable = 8,
+    Disable = 0
+  };
+
+  static inline void SetMSTATUS(MSTATUS_FS fs, MSTATUS_MIE mie)
+  {
+    auto val = (riscv::uint_xlen_t)fs + (riscv::uint_xlen_t)mie;
+    CSR<CSR_REGS::mstatus>::write(val);
   }
 
 } // namespace riscv 
+
+namespace QingKeV4
+{
+  // ======= INTSYSCR =======
+  enum class HWSTKOVEN // Interrupt enable after HPE overflow
+  { 
+    Enable = 0x10, // Interrupts are still executable after a hardware stack overflow6
+    Disable = 0    // Global interrupts are turned off after a HPE overflow
+  };
+
+  enum class PMTCFG // Interrupt nesting depth configuration
+  {
+    NoNesting = 0, // No nesting, the number of preemption bits is 0
+    _2 = 1<<2,     // 2 levels of nesting, with 1 number of preemption bits
+    _4 = 2<<2,     // 4 levels of nesting, with 2 number of preemption bits
+    _8 = 3<<2      // 8 levels of nesting, with 3 number of preemption bits 
+  };
+
+  enum class INESTEN  // Interrupt nesting enable
+  {
+    Enable = 2, // Interrupt nesting function enabled
+    Disable = 0 // Interrupt nesting function off
+  };
+
+  enum class HWSTKEN // HPE enable
+  {
+    Enable = 1, // HPE function enabled
+    Disable = 0 // HPE function off
+  };
+
+  static inline void SetINTSYSCR(HWSTKOVEN hwstkoven, PMTCFG pmtcfg, INESTEN inesten, HWSTKEN hwstken)
+  {
+    auto val = (riscv::uint_xlen_t)hwstkoven + (riscv::uint_xlen_t)pmtcfg
+             + (riscv::uint_xlen_t)inesten + (riscv::uint_xlen_t)hwstken;
+    riscv::CSR<riscv::CSR_REGS::intsyscr>::write<0x1F>(val);
+  }
+
+
+
+} // namespace QingKeV4

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <EmbeddedProfile xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ToolchainID>941d50ac-5ce0-4df3-b026-605e2065eeab</ToolchainID>
+  <ToolchainID>d3a338e9-3c1a-4a24-8c87-2b9667bb3b2e</ToolchainID>
   <ToolchainVersion>
     <GCC>12.2.0</GCC>
     <GDB>(xPack</GDB>

@@ -1,5 +1,6 @@
 #include <cstddef>
 
+#include "CH32/ch32v30x.h"
 #include "risc-v.hpp"
 
 #ifdef __cplusplus
@@ -15,7 +16,6 @@ void __attribute__((used, naked, section(".init"))) _start(void)
 {
   extern uint32_t __global_pointer$;
   extern uint32_t _eusrstack;
-  //__disable_irq();
   riscv::SetGP(&__global_pointer$);
   riscv::SetSP(&_eusrstack);
   __asm volatile ("j Reset_Handler;");
@@ -223,30 +223,37 @@ const intvec_elem __vector_table[] __attribute__((used, section(".vectors"))) =
   &DMA2_Channel11_IRQHandler
 };
 
-#ifdef __cplusplus
-}
-#endif
-
 void Default_Handler() { for (;;); }
 
 void __attribute__((used, naked, noreturn)) Reset_Handler()
 {
-  SystemInit();
-  
+  using namespace riscv;
+  using namespace QingKeV4;
+
+	SystemInit();
+
   extern uint32_t _sidata[], _sdata[], _edata[], _sbss[], _ebss[];
 #ifndef __DEBUG_SRAM__
   for (volatile uint32_t* pSrc = _sidata, *pDst = _sdata; pDst != _edata; *pDst++ = *pSrc++);
 #endif
   for (volatile uint32_t* pDst = _sbss; pDst != _ebss; *pDst++ = 0); // Zero -> BSS
 
+  // Set Pipeline, instruction prediction and ??? (no documents found)
+  CSR<CSR_REGS::corecfgr>::write<0x1F>(0x1F);
+
+  // Enable nested and hardware stack
+  SetINTSYSCR(HWSTKOVEN::Enable, PMTCFG::_8, INESTEN::Enable, HWSTKEN::Enable);
+
   // vector table uses the absolute address of the interrupt function
-  riscv::SetMTVEC(__vector_table-2, riscv::EXCEPTIONS_MODE::VTABLE_ADDR);
-  
-  // Enable floating point and interrupt 
-  //riscv::csr::SetMSTATUS(0x6088);
+  SetMTVEC(__vector_table-2, EXCEPTIONS_MODE::VTABLE_ADDR);
+
+  // Enable floating point, interrupts disable
+  SetMSTATUS(MSTATUS_FS::Dirty, MSTATUS_MIE::Disable);
   
   main();
 
 }
 
-
+#ifdef __cplusplus
+}
+#endif

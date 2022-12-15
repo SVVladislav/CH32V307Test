@@ -112,48 +112,6 @@ typedef struct
 
 #define SysTick         ((SysTick_Type *) 0xE000F000)
 
-/*********************************************************************
- * @fn      NVIC_EnableIRQ
- *
- * @brief   Enable Interrupt
- *
- * @param   IRQn: Interrupt Numbers
- *
- * @return  none
- */
-RV_STATIC_INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
-{
-  NVIC->IENR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
-}
-
-/*********************************************************************
- * @fn      NVIC_DisableIRQ
- *
- * @brief   Disable Interrupt
- *
- * @param   IRQn: Interrupt Numbers
- *
- * @return  none
- */
-RV_STATIC_INLINE void NVIC_DisableIRQ(IRQn_Type IRQn)
-{
-  NVIC->IRER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
-}
-
-/*********************************************************************
- * @fn      NVIC_GetStatusIRQ
- *
- * @brief   Get Interrupt Enable State
- *
- * @param   IRQn: Interrupt Numbers
- *
- * @return  1 - Interrupt Enable
- *          0 - Interrupt Disable
- */
-RV_STATIC_INLINE uint32_t NVIC_GetStatusIRQ(IRQn_Type IRQn)
-{
-  return((uint32_t) ((NVIC->ISR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0));
-}
 
 /*********************************************************************
  * @fn      NVIC_GetPendingIRQ
