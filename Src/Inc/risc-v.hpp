@@ -58,7 +58,7 @@ static inline void __disable_irq()
 
 namespace riscv 
 {
-  static inline void SetGP(uint32_t *value)
+  static inline void SetGP(uint_xlen_t *value)
   {
     __asm volatile (".option push;"
                     ".option norelax;"
@@ -67,7 +67,7 @@ namespace riscv
                     : : "" (value));
   }
 
-  static inline void SetSP(uint32_t* value)
+  static inline void SetSP(uint_xlen_t *value)
   {
     __asm volatile ("la sp, %0;" : : "" (value));
   }
@@ -82,12 +82,12 @@ namespace riscv
     CSR<CSR_REGS::mtvec>::write(val);
   }
 
-  static inline void SetMTVEC(uint32_t value)
+  static inline void SetMTVEC(uint_xlen_t value)
   {
     CSR<CSR_REGS::mtvec>::write(value);
   }
 
-  static inline void SetMSTATUS(uint32_t value)
+  static inline void SetMSTATUS(uint_xlen_t value)
   {
     CSR<CSR_REGS::mstatus>::write(value);
   }
