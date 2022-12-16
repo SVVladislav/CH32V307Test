@@ -9,6 +9,9 @@
       <UniqueIdentifier>{93eff3ae-c973-48de-ae47-9eee6c05e815}</UniqueIdentifier>
       <Extensions>vgdbsettings</Extensions>
     </Filter>
+    <Filter Include="Source files\Device-specific files">
+      <UniqueIdentifier>{5ecdf0b1-377e-4db6-94d4-559ad6d32b70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="CH32V307-Test-Debug.vgdbsettings">
@@ -26,6 +29,9 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\low_level_init.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\startup_ch32v30x.s">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\startup_gcc_ch32v307.cpp">

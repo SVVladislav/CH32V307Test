@@ -31,14 +31,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <GNUConfigurationType>Debug</GNUConfigurationType>
-    <ToolchainID>941d50ac-5ce0-4df3-b026-605e2065eeab</ToolchainID>
+    <ToolchainID>d3a338e9-3c1a-4a24-8c87-2b9667bb3b2e</ToolchainID>
     <ToolchainVersion>12.2.0/(xPack/r0</ToolchainVersion>
     <MCUPropertyListFile>$(ProjectDir)mcu.props</MCUPropertyListFile>
     <GenerateBuildScript>false</GenerateBuildScript>
     <UserVariablePropertyListFile>$(ProjectDir)$(ProjectName)-user.props</UserVariablePropertyListFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|VisualGDB'">
-    <ToolchainID>941d50ac-5ce0-4df3-b026-605e2065eeab</ToolchainID>
+    <ToolchainID>d3a338e9-3c1a-4a24-8c87-2b9667bb3b2e</ToolchainID>
     <ToolchainVersion>12.2.0/(xPack/r0</ToolchainVersion>
     <MCUPropertyListFile>$(ProjectDir)mcu.props</MCUPropertyListFile>
   </PropertyGroup>
@@ -50,8 +50,8 @@
       <Optimization>Os</Optimization>
       <InlineFunctions>true</InlineFunctions>
       <CLanguageStandard>GNU18</CLanguageStandard>
-      <DebugInformationFormat>Dwarf4</DebugInformationFormat>
-      <LinkTimeOptimization>true</LinkTimeOptimization>
+      <DebugInformationFormat>Dwarf2</DebugInformationFormat>
+      <LinkTimeOptimization>false</LinkTimeOptimization>
     </ClCompile>
     <Link>
       <AdditionalLinkerInputs>;%(Link.AdditionalLinkerInputs)</AdditionalLinkerInputs>
@@ -90,6 +90,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\Src\low_level_init.cpp" />
     <ClCompile Include="..\..\Src\main.cpp" />
+    <ClCompile Include="..\..\Src\startup_ch32v30x.s">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\Src\startup_gcc_ch32v307.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

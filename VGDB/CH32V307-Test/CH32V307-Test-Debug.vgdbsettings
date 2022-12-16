@@ -5,7 +5,6 @@
     <CustomSourceDirectories>
       <Directories />
       <PathStyle>MinGWUnixSlash</PathStyle>
-      <LocalDirForAbsolutePaths>$(ToolchainDir)</LocalDirForAbsolutePaths>
     </CustomSourceDirectories>
     <AutoProgramSPIFFSPartition>true</AutoProgramSPIFFSPartition>
     <MainSourceDirectory>$(ProjectDir)</MainSourceDirectory>
@@ -74,6 +73,12 @@
     <ExtraSettings>
       <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
       <SupportLightweightReferenceAnalysis>true</SupportLightweightReferenceAnalysis>
+      <DiscoverySettings>
+        <Mode>Enabled</Mode>
+        <SearchInProjectDir>true</SearchInProjectDir>
+        <SearchInSourceDirs>true</SearchInSourceDirs>
+        <SearchInIncludeSubdirs>true</SearchInIncludeSubdirs>
+      </DiscoverySettings>
       <CheckForClangFormatFiles>true</CheckForClangFormatFiles>
       <FormattingEngine xsi:nil="true" />
     </ExtraSettings>
@@ -110,7 +115,7 @@
       <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
       <UseAppleExtensions>false</UseAppleExtensions>
       <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
-      <MakeLogFile>true</MakeLogFile>
+      <MakeLogFile>false</MakeLogFile>
       <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
       <UseRelativePathsOnly>false</UseRelativePathsOnly>
       <ExitAction>Disconnect</ExitAction>
