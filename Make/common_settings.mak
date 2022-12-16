@@ -21,7 +21,7 @@ C_SOURCES := \
 CPP_SOURCES := \
 ../Src/main.cpp \
 ../Src/low_level_init.cpp \
-../Src/ch32v307_gcc_startup.cpp \
+../Src/startup_gcc_ch32v307.cpp \
 
 # ASM sources
 ASM_SOURCES := \

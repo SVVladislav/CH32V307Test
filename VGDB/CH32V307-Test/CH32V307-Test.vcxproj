@@ -31,14 +31,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <GNUConfigurationType>Debug</GNUConfigurationType>
-    <ToolchainID>d3a338e9-3c1a-4a24-8c87-2b9667bb3b2e</ToolchainID>
+    <ToolchainID>941d50ac-5ce0-4df3-b026-605e2065eeab</ToolchainID>
     <ToolchainVersion>12.2.0/(xPack/r0</ToolchainVersion>
     <MCUPropertyListFile>$(ProjectDir)mcu.props</MCUPropertyListFile>
     <GenerateBuildScript>false</GenerateBuildScript>
     <UserVariablePropertyListFile>$(ProjectDir)$(ProjectName)-user.props</UserVariablePropertyListFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|VisualGDB'">
-    <ToolchainID>d3a338e9-3c1a-4a24-8c87-2b9667bb3b2e</ToolchainID>
+    <ToolchainID>941d50ac-5ce0-4df3-b026-605e2065eeab</ToolchainID>
     <ToolchainVersion>12.2.0/(xPack/r0</ToolchainVersion>
     <MCUPropertyListFile>$(ProjectDir)mcu.props</MCUPropertyListFile>
   </PropertyGroup>
