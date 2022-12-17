@@ -3,7 +3,7 @@
 #define CH32V307
 
 #include "CH32/ch32v30x.h"
-#include "risc-v.hpp"
+#include "QingKeV4.hpp"
 
 #include "SVVTL/template_lib.hpp"
 
@@ -12,7 +12,3 @@
 
 using LED1 = TLed<GPIO::PA_15>;
 using LED2 = TLed<GPIO::PB_4>;
-
-
-
-

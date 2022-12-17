@@ -33,18 +33,7 @@
   <CustomBuild>
     <PreSyncActions />
     <PreBuildActions />
-    <PostBuildActions>
-      <CustomActionBase xsi:type="CommandLineAction">
-        <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
-        <RemoteHost>
-          <HostName>BuildMachine</HostName>
-          <Transport>BuiltinShortcut</Transport>
-        </RemoteHost>
-        <Command>$(SolutionDir)\listing.bat</Command>
-        <WorkingDirectory>$(BuildDir)</WorkingDirectory>
-        <BackgroundMode>false</BackgroundMode>
-      </CustomActionBase>
-    </PostBuildActions>
+    <PostBuildActions />
     <PreCleanActions />
     <PostCleanActions />
   </CustomBuild>

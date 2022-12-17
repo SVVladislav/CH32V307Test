@@ -1,8 +1,8 @@
 #include "main.hpp"
 
-#include <cstdint>
+using namespace QingKeV4;
 
-#define __interrupt extern "C" void __attribute__((naked))
+
 
 int main()
 {
@@ -18,5 +18,5 @@ __interrupt SysTick_Handler()
 {
   SysTick->SR = 0;
   LED2::Toggle();
-  riscv::mret();
+  interrupt_return;
 }

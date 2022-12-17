@@ -2,164 +2,232 @@
 
 #include <cstdint>
 
-namespace riscv
-{
-#if __riscv_xlen==32 
-    using uint_xlen_t = std::uint32_t;
-#elif __riscv_xlen==64
-    using uint_xlen_t = std::uint64_t;
-#else
-#error "riscv::csr: unknown __riscv_xlen"
+#ifndef __I
+#define     __I     volatile const  // defines 'read only' permissions
+#define     __O     volatile        // defines 'write only' permissions (dosn't work)
+#define     __IO    volatile        // defines 'read / write' permissions
 #endif
 
-  enum class CSR_REGS : uint16_t
-  {
-    marchid = 0xF12,   // Architecture number register
-    mimpid = 0xF13,    // MRO Hardware implementation numbering register
-    mstatus = 0x300,   // MRW Status register
-    misa = 0x301,      // MRW Hardware instruction set register
-    mtvec = 0x305,     // MRW Exception base address register
-    mscratch = 0x340,  // MRW Machine mode staging register
-    mepc = 0x341,      // MRW Exception program pointer register
-    mcause = 0x342,    // MRW Exception cause register
-    mtval = 0x343,     // MRW Exception value register
-//      pmpcfg < i> 0x3A0 + i MRW PMP unit configuration register
-//      pmpaddr < i> 0x3B0 + i MRW PMP unit address register
-    fflags = 0x001,    // URW Floating - point exception flag register
-    frm = 0x002,       // URW Floating - point rounding mode register
-    fcsr = 0x003,      // URW Floating - point control and status register
-    dcsr = 0x7B0,      // DRW Debug control and status registers
-    dpc = 0x7B1,       // DRW Debug mode program pointer register
-    dscratch0 = 0x7B2, // DRW Debug mode staging register 0
-    dscratch1 = 0x7B3, // DRW Debug mode staging register 1
-// Vendordefined CSRs
-    gintenr = 0x800,   // URW Global interrupt enable register
-    intsyscr = 0x804,  // URW Interrupt system control register
-    corecfgr = 0xBC0   // MRW Microprocessor configuration register
-  };
-
-} // namespace riscv
-
-#include "risc-v-csr.hpp"
-
-static inline void __NOP() { __asm volatile ("nop"); }
-
-static inline void __enable_irq()
+namespace riscv
 {
-  //riscv::CSR<riscv::CSR_REGS::mstatus>::set_bits<0x08>();
-  riscv::CSR<riscv::CSR_REGS::gintenr>::set_bits<0x08>(); // Vendor defined "gintenr" CSR
-}
+  #if __riscv_xlen==32
+    using uint_xlen_t = std::uint32_t;
+  #elif __riscv_xlen==64
+    using uint_xlen_t = std::uint64_t;
+  #else
+    #error "riscv::csr: unknown __riscv_xlen"
+  #endif
 
-static inline void __disable_irq()
-{
-  //riscv::CSR<riscv::CSR_REGS::mstatus>::clear_bits<0x08>();
-  riscv::CSR<riscv::CSR_REGS::gintenr>::clear_bits<0x08>(); // Vendor defined "gintenr" CSR
-}
-
-static inline void NVIC_EnableIRQ(IRQn_Type IRQn)
-{
-  NVIC->IENR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
-}
-
-static inline void NVIC_DisableIRQ(IRQn_Type IRQn)
-{
-  NVIC->IRER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
-}
-
-static inline uint32_t NVIC_GetStatusIRQ(IRQn_Type IRQn)
-{
-    return((uint32_t)((NVIC->ISR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F))) ? 1 : 0));
-}
-
-namespace riscv 
-{
-  static inline void SetGP(uint_xlen_t *value)
+  static inline void SetGP(uint_xlen_t* value)
   {
     __asm volatile (".option push;"
-                    ".option norelax;"
-                    "la gp, %0;"
-                    ".option pop;"
-                    : : "" (value));
+    ".option norelax;"
+      "la gp, %0;"
+      ".option pop;"
+      : : "i" (value));
   }
 
-  static inline void SetSP(uint_xlen_t *value)
+  static inline void SetSP(uint_xlen_t* value)
   {
-    __asm volatile ("la sp, %0;" : : "" (value));
+    __asm volatile ("la sp, %0;" : : "i" (value));
   }
 
   static inline void mret() { __asm volatile ("mret"); }
 
-  enum class EXCEPTIONS_MODE { UNIFIED_JUMP=0, UNIFIED_ADR=2, VTABLE_JUMPS=1, VTABLE_ADDR=3 };
+  static inline void __NOP() { __asm volatile ("nop"); }
 
-  static inline void SetMTVEC(const void *padr, EXCEPTIONS_MODE mode)
+  // Volume I : RISC-V User-Level ISA V2.2
+  // 2.8 Control and Status Register Instructions
+  template <uint16_t csr>
+  struct CSR
   {
-    auto val = (reinterpret_cast<uint32_t>(padr) & 0xFFFF'FFFC) + static_cast<uint32_t>(mode);
-    CSR<CSR_REGS::mtvec>::write(val);
-  }
+    static_assert(csr <= 0xFFF, "Wrong CSR");
 
-  static inline void SetMTVEC(uint_xlen_t value)
-  {
-    CSR<CSR_REGS::mtvec>::write(value);
-  }
+    static constexpr uint_xlen_t CSR_IMM_OP_MASK = 0x01F;
 
-  enum class MSTATUS_FS // Floating-point unit status
-  {
-	Off = 0,
-    Initial = 1<<13,
-    Clean = 2<<13,
-    Dirty = 3<<13
+    // RV32I Atomic Read/Write CSR
+    static uint_xlen_t read_write(uint_xlen_t new_value)
+    {
+      uint_xlen_t prev_value;
+      __asm volatile ("csrrw    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "r" (new_value)   // input : register %2
+                      :                   // clobbers: none
+                     );
+      return prev_value;
+    }
+
+    // RV32I Atomic Read/Write CSR immediate
+    static uint_xlen_t read_write_imm(uint_xlen_t new_value)
+    {
+      uint_xlen_t prev_value;
+      __asm volatile ("csrrwi    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "K" (new_value)   // input : immediate %2
+                      :                   // clobbers: none
+                     );
+      return prev_value;
+    }
+
+    // RV32I Atomic Read CSR
+    static uint_xlen_t read()
+    {
+      uint_xlen_t ret_value;
+      __asm volatile ("csrr    %0, %1"
+                      : "=r" (ret_value) // output: register %0
+                      : "i" (csr)         // input : csr %1
+                      :                   // clobbers: none
+                     );
+      return ret_value;
+    }
+
+    // RV32I Atomic Write CSR immediate
+    static void write_imm(uint_xlen_t value)
+    {
+      __asm volatile ("csrwi    %0, %1"
+                      :
+                      : "i" (csr),    // input : csr %1
+                        "K" (value)   // input : immediate %2
+                      :               // clobbers: none
+                     );
+    }
+
+    // RV32I Atomic Read and Set Bits in CSR
+    static inline uint_xlen_t read_set_bits(uint_xlen_t mask)
+    {
+      uint_xlen_t prev_value;
+      __asm volatile ("csrrs    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "r" (mask)        // input : register %2
+                      :                   // clobbers: none
+                     );
+      return prev_value;
+    }
+
+    // RV32I Atomic Read and Set Bits in CSR immediate
+    static inline uint_xlen_t read_set_bits_imm(uint_xlen_t mask)
+    {
+      uint_xlen_t prev_value;
+      __asm volatile ("csrrsi    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "K" (mask)        // input : immediate %2
+                      :                   // clobbers: none
+                     );
+      return prev_value;
+    }
+
+    // RV32I Atomic Read and Clear Bits in CSR
+    static inline uint_xlen_t read_clear_bits(uint_xlen_t mask)
+    {
+      uint_xlen_t prev_value;
+      __asm volatile ("csrrc    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "r" (mask)        // input : register %2
+                      :                   // clobbers: none
+                     );
+      return prev_value;
+    }
+
+    // RV32I Atomic Read and Clear Bits in CSR immediate
+    static inline uint_xlen_t read_clear_bits_imm(uint_xlen_t mask)
+    {
+      uint_xlen_t prev_value;
+      __asm volatile ("csrrci    %0, %1, %2"
+                      : "=r" (prev_value) // output: register %0
+                      : "i" (csr),        // input : csr %1
+                        "K" (mask)        // input : immediate %2
+                      :                   // clobbers: none
+                     );
+      return prev_value;
+    }
+
+    // RV32I Atomic Set Bits in CSR
+    static inline void set_bits(uint_xlen_t mask)
+    {
+      __asm volatile ("csrs    %0, %1"
+                      :
+                      : "i" (csr),        // input : csr %0
+                        "r" (mask)        // input : register %1
+                      :                   // clobbers: none
+                     );
+    }
+
+    // RV32I Atomic Set Bits in CSR immediate
+    static inline void set_bits_imm(uint_xlen_t mask)
+    {
+        __asm volatile ("csrsi    %0, %1"
+                        :
+                        : "i" (csr),        // input : csr %0
+                          "K" (mask)        // input : immediate %1
+                        :                   // clobbers: none
+                       );
+    }
+    // RV32I Atomic Clear Bits in CSR
+    static inline void clear_bits(uint_xlen_t mask)
+    {
+      __asm volatile ("csrc    %0, %1"
+                      :
+                      : "i" (csr),        // input : csr %0
+                        "r" (mask)        // input : register %1
+                      :                   // clobbers: none
+                     );
+    }
+
+    // RV32I Atomic Clear Bits in CSR immediate
+    static inline void clear_bits_imm(uint_xlen_t mask)
+    {
+      __asm volatile ("csrci    %0, %1"
+                      :
+                      : "i" (csr),        // input : csr %0
+                        "K" (mask)        // input : immediate %1
+                      :                   // clobbers: none
+                     );
+    }
+
+    template <uint_xlen_t MASK=0xFFFF'FFFF>
+    static void write(uint_xlen_t value)
+    {
+        if constexpr ((MASK & ~CSR_IMM_OP_MASK) == 0)
+          write_imm(value);
+        else
+          write_(value);
+    }
+
+    template <uint_xlen_t MASK>
+    static inline void set_bits()
+    {
+      if constexpr ((MASK & CSR_IMM_OP_MASK) == MASK)
+        set_bits_imm(MASK);
+      else
+        set_bits(MASK);
+    }
+
+    template <uint_xlen_t MASK>
+    static inline void clear_bits()
+    {
+      if constexpr ((MASK & CSR_IMM_OP_MASK) == MASK)
+        clear_bits_imm(MASK);
+      else
+        clear_bits(MASK);
+    }
+
+  private:
+    // RV32I Atomic Write CSR
+    static void write_(uint_xlen_t value)
+    {
+      __asm volatile ("csrw    %0, %1"
+                      :
+                      : "i" (csr),    // input : csr %1
+                        "r" (value)   // input : register %2
+                      :               // clobbers: none
+                     );
+    }
+
   };
 
-  enum class MSTATUS_MIE  // Machine mode interrupt enable
-  {
-	Enable = 8,
-    Disable = 0
-  };
-
-  static inline void SetMSTATUS(MSTATUS_FS fs, MSTATUS_MIE mie)
-  {
-    auto val = (riscv::uint_xlen_t)fs + (riscv::uint_xlen_t)mie;
-    CSR<CSR_REGS::mstatus>::write(val);
-  }
-
-} // namespace riscv 
-
-namespace QingKeV4
-{
-  // ======= INTSYSCR =======
-  enum class HWSTKOVEN // Interrupt enable after HPE overflow
-  { 
-    Enable = 0x10, // Interrupts are still executable after a hardware stack overflow6
-    Disable = 0    // Global interrupts are turned off after a HPE overflow
-  };
-
-  enum class PMTCFG // Interrupt nesting depth configuration
-  {
-    NoNesting = 0, // No nesting, the number of preemption bits is 0
-    _2 = 1<<2,     // 2 levels of nesting, with 1 number of preemption bits
-    _4 = 2<<2,     // 4 levels of nesting, with 2 number of preemption bits
-    _8 = 3<<2      // 8 levels of nesting, with 3 number of preemption bits 
-  };
-
-  enum class INESTEN  // Interrupt nesting enable
-  {
-    Enable = 2, // Interrupt nesting function enabled
-    Disable = 0 // Interrupt nesting function off
-  };
-
-  enum class HWSTKEN // HPE enable
-  {
-    Enable = 1, // HPE function enabled
-    Disable = 0 // HPE function off
-  };
-
-  static inline void SetINTSYSCR(HWSTKOVEN hwstkoven, PMTCFG pmtcfg, INESTEN inesten, HWSTKEN hwstken)
-  {
-    auto val = (riscv::uint_xlen_t)hwstkoven + (riscv::uint_xlen_t)pmtcfg
-             + (riscv::uint_xlen_t)inesten + (riscv::uint_xlen_t)hwstken;
-    riscv::CSR<riscv::CSR_REGS::intsyscr>::write<0x1F>(val);
-  }
-
-
-
-} // namespace QingKeV4
+} // namespace riscv
