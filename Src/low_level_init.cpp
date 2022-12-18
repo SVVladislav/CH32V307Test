@@ -16,10 +16,11 @@ void SystemInit()
   using namespace GPIO;
 
   ConfigList<PinMode::Input_PullUp, PA_14, PA_13,  // SWD
-	         PinMode::PushPull_LowSpeed<0>, LED1::tpin, LED2::tpin,
+	           PinMode::PushPull_LowSpeed<0>, LED1::tpin, LED2::tpin,
+             PinMode::Input_PullUp, KEY::tpin,
              PinMode::Input, CfgCmd::AllUnusedPins>::pwr_config();
 
-  SysTick->CMP = 4'000'000ULL;
+  SysTick->CMP = CPU_FREQ/100;
   SysTick->CTLR = (1 << 5) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
 
 }

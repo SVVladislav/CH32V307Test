@@ -51,15 +51,15 @@ namespace QingKeV4
   {
     __IO uint32_t CTLR;
     __IO uint32_t SR;
-    __IO uint32_t CNT;
-    __IO uint32_t CMP;
+    __IO uint64_t CNT;
+    __IO uint64_t CMP;
   };
 
 #define PFIC            ((QingKeV4::PFIC_Type *) 0xE000E000)
 #define NVIC            PFIC
 #define NVIC_KEY1       ((uint32_t)0xFA050000)
-#define NVIC_KEY2               ((uint32_t)0xBCAF0000)
-#define NVIC_KEY3               ((uint32_t)0xBEEF0000)
+#define NVIC_KEY2       ((uint32_t)0xBCAF0000)
+#define NVIC_KEY3       ((uint32_t)0xBEEF0000)
 #define SysTick         ((QingKeV4::SysTick_Type *) 0xE000F000)
 
   enum CSR_REGS : uint16_t
