@@ -92,6 +92,7 @@
     <ClCompile Include="..\..\Src\main.cpp" />
     <ClCompile Include="..\..\Src\startup_ch32v30x.s">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|VisualGDB'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\Src\startup_gcc_ch32v307.cpp" />
   </ItemGroup>

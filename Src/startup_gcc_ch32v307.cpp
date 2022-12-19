@@ -230,7 +230,19 @@ void __attribute__((used, naked, noreturn)) Reset_Handler()
   using namespace riscv;
   using namespace QingKeV4;
 
+  // Set Pipeline, instruction prediction and ??? (no documents found)
+  CSR<CSR_REGS::corecfgr>::write<0x1F>(0x1F);
+
 	SystemInit();
+
+  // Enable nested and hardware stack
+  SetINTSYSCR(HWSTKOVEN::Enable, PMTCFG::_8, INESTEN::Enable, HWSTKEN::Enable);
+
+  // vector table uses the absolute address of the interrupt function
+  SetMTVEC(__vector_table - 2, EXCEPTIONS_MODE::VTABLE_ADDR);
+
+  // Enable floating point, interrupts disable
+  SetMSTATUS(MSTATUS_FS::Dirty, MSTATUS_MIE::Disable);
 
   extern uint32_t _sidata[], _sdata[], _edata[], _sbss[], _ebss[];
 #ifndef __DEBUG_SRAM__
@@ -238,18 +250,15 @@ void __attribute__((used, naked, noreturn)) Reset_Handler()
 #endif
   for (volatile uint32_t* pDst = _sbss; pDst != _ebss; *pDst++ = 0); // Zero -> BSS
 
-  // Set Pipeline, instruction prediction and ??? (no documents found)
-  CSR<CSR_REGS::corecfgr>::write<0x1F>(0x1F);
+  // Use with the "-nostartfiles" linker option instead __libc_init_array();
+  // Iterate over all the preinit/init routines (mainly static constructors).
+  extern void (*__preinit_array_start[]) ();
+  extern void (*__preinit_array_end[]) ();
+  extern void (*__init_array_start[]) ();
+  extern void (*__init_array_end[]) ();
+  for (void(**fConstr)() = __preinit_array_start; fConstr < __preinit_array_end; (*fConstr++)());
+  for (void(**fConstr)() = __init_array_start; fConstr < __init_array_end; (*fConstr++)());
 
-  // Enable nested and hardware stack
-  SetINTSYSCR(HWSTKOVEN::Enable, PMTCFG::_8, INESTEN::Enable, HWSTKEN::Enable);
-
-  // vector table uses the absolute address of the interrupt function
-  SetMTVEC(__vector_table-2, EXCEPTIONS_MODE::VTABLE_ADDR);
-
-  // Enable floating point, interrupts disable
-  SetMSTATUS(MSTATUS_FS::Dirty, MSTATUS_MIE::Disable);
-  
   main();
 
 }

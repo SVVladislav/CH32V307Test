@@ -327,59 +327,62 @@ typedef struct
 #define RCC_USBCLK48MCLKSource_PLLCLK    ((uint32_t)0x00)
 #define RCC_USBCLK48MCLKSource_USBPHY    ((uint32_t)0x01)
 
+/* RCC registers bit address in the alias region */
+#define RCC_OFFSET                (RCC_BASE - PERIPH_BASE)
 
-void RCC_DeInit(void);
-void RCC_HSEConfig(uint32_t RCC_HSE);
-ErrorStatus RCC_WaitForHSEStartUp(void);
-void RCC_AdjustHSICalibrationValue(uint8_t HSICalibrationValue);
-void RCC_HSICmd(FunctionalState NewState);
-void RCC_PLLConfig(uint32_t RCC_PLLSource, uint32_t RCC_PLLMul);
-void RCC_PLLCmd(FunctionalState NewState);
-void RCC_SYSCLKConfig(uint32_t RCC_SYSCLKSource);
-uint8_t RCC_GetSYSCLKSource(void);
-void RCC_HCLKConfig(uint32_t RCC_SYSCLK);
-void RCC_PCLK1Config(uint32_t RCC_HCLK);
-void RCC_PCLK2Config(uint32_t RCC_HCLK);
-void RCC_ITConfig(uint8_t RCC_IT, FunctionalState NewState);
-void RCC_ADCCLKConfig(uint32_t RCC_PCLK2);
-void RCC_LSEConfig(uint8_t RCC_LSE);
-void RCC_LSICmd(FunctionalState NewState);
-void RCC_RTCCLKConfig(uint32_t RCC_RTCCLKSource);
-void RCC_RTCCLKCmd(FunctionalState NewState);
-void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks);
-void RCC_AHBPeriphClockCmd(uint32_t RCC_AHBPeriph, FunctionalState NewState);
-void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState);
-void RCC_APB1PeriphClockCmd(uint32_t RCC_APB1Periph, FunctionalState NewState); 
-void RCC_APB2PeriphResetCmd(uint32_t RCC_APB2Periph, FunctionalState NewState);
-void RCC_APB1PeriphResetCmd(uint32_t RCC_APB1Periph, FunctionalState NewState);
-void RCC_BackupResetCmd(FunctionalState NewState);
-void RCC_ClockSecuritySystemCmd(FunctionalState NewState);
-void RCC_MCOConfig(uint8_t RCC_MCO);
-FlagStatus RCC_GetFlagStatus(uint8_t RCC_FLAG);
-void RCC_ClearFlag(void);
-ITStatus RCC_GetITStatus(uint8_t RCC_IT);
-void RCC_ClearITPendingBit(uint8_t RCC_IT);
+/* BDCTLR Register */
+#define BDCTLR_OFFSET             (RCC_OFFSET + 0x20)
 
-void RCC_PREDIV1Config(uint32_t RCC_PREDIV1_Source, uint32_t RCC_PREDIV1_Div);
-void RCC_PREDIV2Config(uint32_t RCC_PREDIV2_Div);
-void RCC_PLL2Config(uint32_t RCC_PLL2Mul);
-void RCC_PLL2Cmd(FunctionalState NewState);
-void RCC_PLL3Config(uint32_t RCC_PLL3Mul);
-void RCC_PLL3Cmd(FunctionalState NewState);
-void RCC_OTGFSCLKConfig(uint32_t RCC_OTGFSCLKSource);
-void RCC_I2S2CLKConfig(uint32_t RCC_I2S2CLKSource);
-void RCC_I2S3CLKConfig(uint32_t RCC_I2S3CLKSource);
-void RCC_AHBPeriphResetCmd(uint32_t RCC_AHBPeriph, FunctionalState NewState);
+/* RCC registers bit mask */
 
-void RCC_ADCCLKADJcmd(FunctionalState NewState);
-void RCC_RNGCLKConfig(uint32_t RCC_RNGCLKSource);
-void RCC_ETH1GCLKConfig(uint32_t RCC_ETH1GCLKSource);
-void RCC_ETH1G_125Mcmd(FunctionalState NewState);
-void RCC_USBHSConfig(uint32_t RCC_USBHS);
-void RCC_USBHSPLLCLKConfig(uint32_t RCC_USBHSPLLCLKSource);
-void RCC_USBHSPLLCKREFCLKConfig(uint32_t RCC_USBHSPLLCKREFCLKSource);
-void RCC_USBHSPHYPLLALIVEcmd(FunctionalState NewState);
-void RCC_USBCLK48MConfig(uint32_t RCC_USBCLK48MSource);
+/* CTLR register bit mask */
+#define CTLR_HSEBYP_Reset           ((uint32_t)0xFFFBFFFF)
+#define CTLR_HSEBYP_Set             ((uint32_t)0x00040000)
+#define CTLR_HSEON_Reset            ((uint32_t)0xFFFEFFFF)
+#define CTLR_HSEON_Set              ((uint32_t)0x00010000)
+#define CTLR_HSITRIM_Mask           ((uint32_t)0xFFFFFF07)
+
+#define CFGR0_PLL_Mask              ((uint32_t)0xFFC0FFFF)  /* 103 */
+#define CFGR0_PLL_Mask_1            ((uint32_t)0xFFC2FFFF)  /* 107 */
+
+#define CFGR0_PLLMull_Mask          ((uint32_t)0x003C0000)
+#define CFGR0_PLLSRC_Mask           ((uint32_t)0x00010000)
+#define CFGR0_PLLXTPRE_Mask         ((uint32_t)0x00020000)
+#define CFGR0_SWS_Mask              ((uint32_t)0x0000000C)
+#define CFGR0_SW_Mask               ((uint32_t)0xFFFFFFFC)
+#define CFGR0_HPRE_Reset_Mask       ((uint32_t)0xFFFFFF0F)
+#define CFGR0_HPRE_Set_Mask         ((uint32_t)0x000000F0)
+#define CFGR0_PPRE1_Reset_Mask      ((uint32_t)0xFFFFF8FF)
+#define CFGR0_PPRE1_Set_Mask        ((uint32_t)0x00000700)
+#define CFGR0_PPRE2_Reset_Mask      ((uint32_t)0xFFFFC7FF)
+#define CFGR0_PPRE2_Set_Mask        ((uint32_t)0x00003800)
+#define CFGR0_ADCPRE_Reset_Mask     ((uint32_t)0xFFFF3FFF)
+#define CFGR0_ADCPRE_Set_Mask       ((uint32_t)0x0000C000)
+
+/* RSTSCKR register bit mask */
+#define RSTSCKR_RMVF_Set            ((uint32_t)0x01000000)
+
+/* CFGR2 register bit mask */
+#define CFGR2_PREDIV1SRC            ((uint32_t)0x00010000)
+#define CFGR2_PREDIV1               ((uint32_t)0x0000000F)
+#define CFGR2_PREDIV2               ((uint32_t)0x000000F0)
+#define CFGR2_PLL2MUL               ((uint32_t)0x00000F00)
+#define CFGR2_PLL3MUL               ((uint32_t)0x0000F000)
+
+/* RCC Flag Mask */
+#define FLAG_Mask                   ((uint8_t)0x1F)
+
+/* INTR register byte 2 (Bits[15:8]) base address */
+#define INTR_BYTE2_ADDRESS          ((uint32_t)0x40021009)
+
+/* INTR register byte 3 (Bits[23:16]) base address */
+#define INTR_BYTE3_ADDRESS          ((uint32_t)0x4002100A)
+
+/* CFGR0 register byte 4 (Bits[31:24]) base address */
+#define CFGR0_BYTE4_ADDRESS         ((uint32_t)0x40021007)
+
+/* BDCTLR register base address */
+#define BDCTLR_ADDRESS              (PERIPH_BASE + BDCTLR_OFFSET)
 
 #ifdef __cplusplus
 }
