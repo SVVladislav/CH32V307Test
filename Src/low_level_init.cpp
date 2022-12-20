@@ -10,21 +10,44 @@ using pVU32 = volatile uint32_t*;
 
 void SystemInit()
 {
-
   // HSE On
-  SVVTL::WriteReg32<0x00FF'0000>(&RCC->CTLR, RCC_HSE_ON); //Включим HSE
-  //while (!(RCC->CTLR & 0x2'0000));
-  while (!(*(pVU8(&RCC->CTLR) + 2) & 0x2));
+  SVVTL::WriteReg32<0x00FF'0000>(&RCC->CTLR, RCC_HSEON);
 
-  RCC->CFGR0 = 0;
-  
+  // Whait HSE
+  while (!(SVVTL::ReadReg32<0x00FF'0000>(&RCC->CTLR) & (RCC_HSERDY>>16)));
 
+  RCC->CFGR0 = RCC_MCO_NOCLOCK | RCC_USBPRE | RCC_PLLMULL18 | CFGR0_PLLSRC_HSE | RCC_ADCPRE_DIV8
+             | RCC_PPRE2_DIV2 | RCC_PPRE1_DIV1 | RCC_HPRE_DIV1 | RCC_SW_HSI;
 
-  RCC->APB2PCENR = (0 ? RCC_APB2Periph_TIM10 : 0U) + (0 ? RCC_APB2Periph_TIM9 : 0U) + (0 ? RCC_APB2Periph_TIM8 : 0U)
-                 + (0 ? RCC_APB2Periph_TIM1 : 0U) + (0 ? RCC_APB2Periph_USART1 : 0U) + (0 ? RCC_APB2Periph_SPI1 : 0U)
-                 + (0 ? RCC_APB2Periph_ADC2 : 0U) + (0 ? RCC_APB2Periph_ADC1 : 0U) + (0 ? RCC_APB2Periph_GPIOE : 0U)
-                 + (0 ? RCC_APB2Periph_GPIOD : 0U) + (0 ? RCC_APB2Periph_GPIOC : 0U) + (1 ? RCC_APB2Periph_GPIOB : 0U)
-                 + (1 ? RCC_APB2Periph_GPIOA : 0U) + (0 ? RCC_APB2Periph_AFIO : 0U);
+  // PLL On
+  SVVTL::WriteReg32<0xFF00'0000>(&RCC->CTLR, RCC_PLLON);
+
+  // Whait PLL
+  while (!(SVVTL::ReadReg32<0xFF00'0000>(&RCC->CTLR) & (RCC_PLLRDY >> 24)));
+
+  // Switch to PLL
+  SVVTL::WriteReg32<0x0000'00FF>(&RCC->CFGR0, RCC_SW_PLL);
+
+  RCC->AHBPCENR = (0 ? RCC_AHBPeriph_DMA1       : 0) + (0 ? RCC_AHBPeriph_DMA2    : 0) + (1 ? RCC_AHBPeriph_SRAM       : 0)
+                + (0 ? RCC_AHBPeriph_CRC        : 0) + (0 ? RCC_AHBPeriph_FSMC    : 0) + (0 ? RCC_AHBPeriph_RNG        : 0)
+                + (0 ? RCC_AHBPeriph_SDIO       : 0) + (0 ? RCC_AHBPeriph_USBHS   : 0) + (1 ? RCC_AHBPeriph_OTG_FS     : 0)
+                + (0 ? RCC_AHBPeriph_DVP        : 0) + (0 ? RCC_AHBPeriph_ETH_MAC : 0) + (0 ? RCC_AHBPeriph_ETH_MAC_Tx : 0)
+                + (0 ? RCC_AHBPeriph_ETH_MAC_Rx : 0);
+
+  RCC->APB2PCENR = (0 ? RCC_APB1Periph_TIM2   : 0) + (0 ? RCC_APB1Periph_TIM3   : 0) + (0 ? RCC_APB1Periph_TIM4  : 0)
+                 + (0 ? RCC_APB1Periph_TIM5   : 0) + (0 ? RCC_APB1Periph_TIM6   : 0) + (0 ? RCC_APB1Periph_TIM7  : 0)
+                 + (0 ? RCC_APB1Periph_UART6  : 0) + (0 ? RCC_APB1Periph_UART7  : 0) + (0 ? RCC_APB1Periph_UART8 : 0)
+                 + (0 ? RCC_APB1Periph_WWDG   : 0) + (0 ? RCC_APB1Periph_SPI2   : 0) + (0 ? RCC_APB1Periph_SPI3  : 0)
+                 + (0 ? RCC_APB1Periph_USART2 : 0) + (0 ? RCC_APB1Periph_USART3 : 0) + (0 ? RCC_APB1Periph_UART4 : 0)
+                 + (0 ? RCC_APB1Periph_UART5  : 0) + (0 ? RCC_APB1Periph_I2C1   : 0) + (0 ? RCC_APB1Periph_I2C2  : 0)
+                 + (0 ? RCC_APB1Periph_USB    : 0) + (0 ? RCC_APB1Periph_CAN1   : 0) + (0 ? RCC_APB1Periph_CAN2  : 0)
+                 + (0 ? RCC_APB1Periph_BKP    : 0) + (0 ? RCC_APB1Periph_PWR    : 0) + (0 ? RCC_APB1Periph_DAC   : 0);
+
+  RCC->APB2PCENR = (0 ? RCC_APB2Periph_TIM10 : 0U) + (0 ? RCC_APB2Periph_TIM9   : 0U) + (0 ? RCC_APB2Periph_TIM8  : 0U)
+                 + (0 ? RCC_APB2Periph_TIM1  : 0U) + (0 ? RCC_APB2Periph_USART1 : 0U) + (0 ? RCC_APB2Periph_SPI1  : 0U)
+                 + (0 ? RCC_APB2Periph_ADC2  : 0U) + (0 ? RCC_APB2Periph_ADC1   : 0U) + (0 ? RCC_APB2Periph_GPIOE : 0U)
+                 + (0 ? RCC_APB2Periph_GPIOD : 0U) + (0 ? RCC_APB2Periph_GPIOB  : 0U) + (1 ? RCC_APB2Periph_GPIOB : 0U)
+                 + (1 ? RCC_APB2Periph_GPIOA : 0U) + (0 ? RCC_APB2Periph_AFIO   : 0U);
 
   using namespace GPIO;
 

@@ -24,11 +24,6 @@ typedef struct
   uint32_t ADCCLK_Frequency;  /* returns ADCCLK clock frequency expressed in Hz */
 }RCC_ClocksTypeDef;
 
-/* HSE_configuration */
-#define RCC_HSE_OFF                      ((uint32_t)0x00000000)
-#define RCC_HSE_ON                       ((uint32_t)0x00010000)
-#define RCC_HSE_Bypass                   ((uint32_t)0x00040000)
-
 /* PLL_entry_clock_source */
 #define RCC_PLLSource_HSI_Div2           ((uint32_t)0x00000000)
 #define RCC_PLLSource_PREDIV1            ((uint32_t)0x00010000)
@@ -358,6 +353,10 @@ typedef struct
 #define CFGR0_PPRE2_Set_Mask        ((uint32_t)0x00003800)
 #define CFGR0_ADCPRE_Reset_Mask     ((uint32_t)0xFFFF3FFF)
 #define CFGR0_ADCPRE_Set_Mask       ((uint32_t)0x0000C000)
+
+#define CFGR0_PLLSRC_HSI            ((uint32_t)0x00000000)
+#define CFGR0_PLLSRC_HSE            ((uint32_t)0x00010000)
+#define CFGR0_PLLSRC_HSE_Div2       ((uint32_t)0x00030000)
 
 /* RSTSCKR register bit mask */
 #define RSTSCKR_RMVF_Set            ((uint32_t)0x01000000)
