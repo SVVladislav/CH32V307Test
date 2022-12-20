@@ -30,9 +30,14 @@ void SystemInit()
 
   RCC->AHBPCENR = (0 ? RCC_AHBPeriph_DMA1       : 0) + (0 ? RCC_AHBPeriph_DMA2    : 0) + (1 ? RCC_AHBPeriph_SRAM       : 0)
                 + (0 ? RCC_AHBPeriph_CRC        : 0) + (0 ? RCC_AHBPeriph_FSMC    : 0) + (0 ? RCC_AHBPeriph_RNG        : 0)
-                + (0 ? RCC_AHBPeriph_SDIO       : 0) + (0 ? RCC_AHBPeriph_USBHS   : 0) + (1 ? RCC_AHBPeriph_OTG_FS     : 0)
-                + (0 ? RCC_AHBPeriph_DVP        : 0) + (0 ? RCC_AHBPeriph_ETH_MAC : 0) + (0 ? RCC_AHBPeriph_ETH_MAC_Tx : 0)
-                + (0 ? RCC_AHBPeriph_ETH_MAC_Rx : 0);
+                + (0 ? RCC_AHBPeriph_SDIO       : 0) + (0 ? RCC_AHBPeriph_DVP     : 0) + (0 ? RCC_AHBPeriph_ETH_MAC    : 0)
+#ifdef USB_HS_ENABLE
+                + (1 ? RCC_AHBPeriph_USBHS      : 0)
+#endif
+#ifdef USB_FS_ENABLE
+                + (1 ? RCC_AHBPeriph_OTG_FS     : 0)
+#endif
+                + (0 ? RCC_AHBPeriph_ETH_MAC_Tx : 0) + (0 ? RCC_AHBPeriph_ETH_MAC_Rx : 0);
 
   RCC->APB2PCENR = (0 ? RCC_APB1Periph_TIM2   : 0) + (0 ? RCC_APB1Periph_TIM3   : 0) + (0 ? RCC_APB1Periph_TIM4  : 0)
                  + (0 ? RCC_APB1Periph_TIM5   : 0) + (0 ? RCC_APB1Periph_TIM6   : 0) + (0 ? RCC_APB1Periph_TIM7  : 0)
@@ -58,6 +63,14 @@ void SystemInit()
 
   SysTick->CMP = CPU_FREQ/100;
   SysTick->CTLR = (1 << 5) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
+
+#ifdef USB_HS_ENABLE
+  CH32_OTG_HS_DEVICE::Init();
+#endif
+
+#ifdef USB_FS_ENABLE
+  CH32_OTG_FS_DEVICE::Init();
+#endif
 
 }
 

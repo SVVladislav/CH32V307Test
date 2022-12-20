@@ -37,6 +37,9 @@
     <ClCompile Include="..\..\Src\startup_gcc_ch32v307.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Inc\Hardware\USB\usb.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="MCU.xml">

@@ -88,6 +88,7 @@
     <Xml Include="MCU.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\Inc\Hardware\USB\usb.cpp" />
     <ClCompile Include="..\..\Src\low_level_init.cpp" />
     <ClCompile Include="..\..\Src\main.cpp" />
     <ClCompile Include="..\..\Src\startup_ch32v30x.s">
