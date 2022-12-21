@@ -4440,7 +4440,7 @@ typedef struct
 #define  RCC_PLLMULL15_EXTEN             ((uint32_t)0x00380000)        /* PLL input clock*15 */
 #define  RCC_PLLMULL16_EXTEN             ((uint32_t)0x003C0000)        /* PLL input clock*16 */
 
-#define  RCC_USBPRE                      ((uint32_t)0x00400000)        /* USB Device prescaler */
+#define  RCC_USBPRE                      ((uint32_t)0x00800000)        /* USB Device prescaler */
 
 #define  RCC_CFGR0_MCO                   ((uint32_t)0x07000000)        /* MCO[2:0] bits (Microcontroller Clock Output) */
 #define  RCC_MCO_0                       ((uint32_t)0x01000000)        /* Bit 0 */

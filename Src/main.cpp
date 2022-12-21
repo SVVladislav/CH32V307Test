@@ -14,9 +14,14 @@ int main()
 
   __enable_irq();
 
+  CH32_OTG_FS_DEVICE::PullUpOn();
+
   for (;;)
   {
-	if(key.isKeyPressed()) LED1::Toggle();
+    if (key.isKeyPressed())
+    {
+      LED1::On();
+    }
   };
 }
 

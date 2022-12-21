@@ -1,7 +1,7 @@
 #pragma once
 
 #define CH32V307
-#define CPU_FREQ 72'000'000
+#define CPU_FREQ 144'000'000
 
 #include "CH32/ch32v30x.h"
 #include "QingKeV4.hpp"
@@ -17,7 +17,7 @@ using LED2 = TLed<GPIO::PB_4>;
 using KEY = TKey<GPIO::PB_3, true>;
 
 #define USB_FS_ENABLE
-#define USB_HS_ENABLE
+//#define USB_HS_ENABLE
 #include "Hardware/USB/usb.hpp"
 #include "Hardware/USB/usb_cdc.hpp"
 

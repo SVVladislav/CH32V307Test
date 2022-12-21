@@ -16,7 +16,7 @@ void SystemInit()
   // Whait HSE
   while (!(SVVTL::ReadReg32<0x00FF'0000>(&RCC->CTLR) & (RCC_HSERDY>>16)));
 
-  RCC->CFGR0 = RCC_MCO_NOCLOCK | RCC_USBPRE | RCC_PLLMULL18 | CFGR0_PLLSRC_HSE | RCC_ADCPRE_DIV8
+  RCC->CFGR0 = RCC_CFGR0_MCO_PLL | RCC_USBPRE | RCC_PLLMULL18_EXTEN | CFGR0_PLLSRC_HSE | RCC_ADCPRE_DIV8
              | RCC_PPRE2_DIV2 | RCC_PPRE1_DIV1 | RCC_HPRE_DIV1 | RCC_SW_HSI;
 
   // PLL On
@@ -59,6 +59,7 @@ void SystemInit()
   ConfigList<PinMode::Input_PullUp, PA_14, PA_13,  // SWD
              PinMode::PushPull_LowSpeed<0>, LED1::tpin, LED2::tpin,
              PinMode::Input_PullUp, KEY::tpin,
+             PinMode::AF_PushPull_HighSpeed, PA_8,
              PinMode::Input, CfgCmd::AllUnusedPins>::pwr_config();
 
   SysTick->CMP = CPU_FREQ/100;
