@@ -64,12 +64,12 @@ void SystemInit()
   SysTick->CMP = CPU_FREQ/100;
   SysTick->CTLR = (1 << 5) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
 
-#ifdef USB_HS_ENABLE
-  CH32_OTG_HS_DEVICE::Init();
-#endif
-
 #ifdef USB_FS_ENABLE
   CH32_OTG_FS_DEVICE::Init();
+#endif
+
+#ifdef USB_HS_ENABLE
+  CH32_USB_HS_DEVICE::Init();
 #endif
 
 }
