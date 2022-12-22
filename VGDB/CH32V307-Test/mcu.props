@@ -10,12 +10,12 @@
 	<ItemDefinitionGroup>
 		<ClCompile>
 			<AdditionalIncludeDirectories>%(ClCompile.AdditionalIncludeDirectories);../../Src/Inc</AdditionalIncludeDirectories>
-			<AdditionalOptions>-march=rv32imafc -mabi=ilp32f %(ClCompile.AdditionalOptions)</AdditionalOptions>
+			<AdditionalOptions>-march=rv32imaf -mabi=ilp32 %(ClCompile.AdditionalOptions)</AdditionalOptions>
 		</ClCompile>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup>
 		<Link>
-			<AdditionalOptions>-nostartfiles -specs=nano.specs -specs=nosys.specs -march=rv32imafc -mabi=ilp32f %(Link.AdditionalOptions)</AdditionalOptions>
+			<AdditionalOptions>-nostartfiles -specs=nano.specs -specs=nosys.specs -march=rv32imaf -mabi=ilp32 %(Link.AdditionalOptions)</AdditionalOptions>
 		</Link>
 	</ItemDefinitionGroup>
 </Project>

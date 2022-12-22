@@ -25,6 +25,7 @@
     <ProjectFile>CH32V307-Test.vcxproj</ProjectFile>
     <RemoteBuildEnvironment>
       <Records />
+      <EnvironmentSetupFiles />
     </RemoteBuildEnvironment>
     <ParallelJobCount>1</ParallelJobCount>
     <SuppressDirectoryChangeMessages>true</SuppressDirectoryChangeMessages>
@@ -64,7 +65,11 @@
   <Configurations />
   <ProgramArgumentsSuggestions />
   <Debug xsi:type="com.visualgdb.debug.embedded">
-    <AdditionalStartupCommands />
+    <AdditionalStartupCommands>
+      <GDBPreStartupCommands />
+      <GDBStartupCommands />
+      <GDBFinalizationCommands />
+    </AdditionalStartupCommands>
     <AdditionalGDBSettings>
       <Features>
         <DisableAutoDetection>false</DisableAutoDetection>
@@ -100,42 +105,48 @@
       <EnablePrettyPrinters>false</EnablePrettyPrinters>
     </AdditionalGDBSettings>
     <DebugMethod>
-      <ID>com.visualgdb.fullcustom</ID>
+      <ID>com.visualgdb.customstub</ID>
       <Configuration>
         <Entries>
           <KeyValue>
-            <Key>com.visualgdb.dbgfallback.GDBArgs</Key>
-            <Value>--interpreter mi $(TargetPath)</Value>
-          </KeyValue>
-          <KeyValue>
-            <Key>com.visualgdb.dbgfallback.GDBDir</Key>
-          </KeyValue>
-          <KeyValue>
-            <Key>com.visualgdb.dbgfallback.GDBEnv</Key>
-            <Value />
-          </KeyValue>
-          <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubEXE</Key>
+            <Value>openocd.exe</Value>
           </KeyValue>
           <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubArgs</Key>
+            <Value>-f wch-riscv.cfg</Value>
           </KeyValue>
           <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubDir</Key>
+            <Value>c:\CPP\OpenOCD-WCH\bin</Value>
           </KeyValue>
           <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubEnv</Key>
+            <Value />
+          </KeyValue>
+          <KeyValue>
+            <Key>com.visualgdb.dbgfallback.GDBStubPort</Key>
+            <Value>3333</Value>
           </KeyValue>
           <KeyValue>
             <Key>com.visualgdb.dbgfallback.GDBStubStartupDelay</Key>
+            <Value>2000</Value>
+          </KeyValue>
+          <KeyValue>
+            <Key>com.visualgdb.dbgfallback.GDBStubEraseCmd</Key>
+            <Value />
+          </KeyValue>
+          <KeyValue>
+            <Key>com.visualgdb.dbgfallback.GDBStubProgramCmd</Key>
+            <Value>load</Value>
+          </KeyValue>
+          <KeyValue>
+            <Key>com.visualgdb.dbgfallback.UseCtrlBreak</Key>
             <Value>0</Value>
           </KeyValue>
           <KeyValue>
-            <Key>com.visualgdb.dbgfallback.TargetSelectCmd</Key>
-          </KeyValue>
-          <KeyValue>
-            <Key>com.visualgdb.dbgfallback.DebugStartCmd</Key>
-            <Value>-exec-run</Value>
+            <Key>com.visualgdb.dbgfallback.SendBreaksToGDBStub</Key>
+            <Value>0</Value>
           </KeyValue>
         </Entries>
       </Configuration>

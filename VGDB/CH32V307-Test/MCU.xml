@@ -22,7 +22,7 @@
       <CXXFLAGS />
       <LDFLAGS>-nostartfiles -specs=nano.specs -specs=nosys.specs</LDFLAGS>
       <ASFLAGS />
-      <COMMONFLAGS>-march=rv32imafc -mabi=ilp32f</COMMONFLAGS>
+      <COMMONFLAGS>-march=rv32imaf -mabi=ilp32</COMMONFLAGS>
       <EnableLinkerGroups>true</EnableLinkerGroups>
     </CompilationFlags>
     <FLASHSize>196608</FLASHSize>
