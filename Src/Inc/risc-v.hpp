@@ -36,6 +36,8 @@ namespace riscv
 
   static inline void __NOP() { __asm volatile ("nop"); }
 
+  static inline void __BKPT() { __asm volatile ("ebreak"); }
+
   // Volume I : RISC-V User-Level ISA V2.2
   // 2.8 Control and Status Register Instructions
   template <uint16_t csr>
