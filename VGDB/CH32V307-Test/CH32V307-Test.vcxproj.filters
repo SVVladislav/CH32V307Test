@@ -31,9 +31,6 @@
     <ClCompile Include="..\..\Src\low_level_init.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\startup_ch32v30x.s">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\startup_gcc_ch32v307.cpp">
       <Filter>Source files</Filter>
     </ClCompile>

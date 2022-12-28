@@ -256,8 +256,8 @@ void __attribute__((used, naked, noreturn)) Reset_Handler()
   extern void (*__preinit_array_end[]) ();
   extern void (*__init_array_start[]) ();
   extern void (*__init_array_end[]) ();
-  //for (void(**fConstr)() = __preinit_array_start; fConstr < __preinit_array_end; (*fConstr++)());
-  //for (void(**fConstr)() = __init_array_start; fConstr < __init_array_end; (*fConstr++)());
+  for (void(**fConstr)() = __preinit_array_start; fConstr < __preinit_array_end; (*fConstr++)());
+  for (void(**fConstr)() = __init_array_start; fConstr < __init_array_end; (*fConstr++)());
 
   main();
 
