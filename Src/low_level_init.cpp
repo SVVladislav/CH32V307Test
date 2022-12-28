@@ -51,8 +51,8 @@ void SystemInit()
   RCC->APB2PCENR = (0 ? RCC_APB2Periph_TIM10 : 0U) + (0 ? RCC_APB2Periph_TIM9   : 0U) + (0 ? RCC_APB2Periph_TIM8  : 0U)
                  + (0 ? RCC_APB2Periph_TIM1  : 0U) + (0 ? RCC_APB2Periph_USART1 : 0U) + (0 ? RCC_APB2Periph_SPI1  : 0U)
                  + (0 ? RCC_APB2Periph_ADC2  : 0U) + (0 ? RCC_APB2Periph_ADC1   : 0U) + (0 ? RCC_APB2Periph_GPIOE : 0U)
-                 + (0 ? RCC_APB2Periph_GPIOD : 0U) + (0 ? RCC_APB2Periph_GPIOB  : 0U) + (1 ? RCC_APB2Periph_GPIOB : 0U)
-                 + (1 ? RCC_APB2Periph_GPIOA : 0U) + (0 ? RCC_APB2Periph_AFIO   : 0U);
+                 + (0 ? RCC_APB2Periph_GPIOD : 0U) + (1 ? RCC_APB2Periph_GPIOC  : 0U) + (1 ? RCC_APB2Periph_GPIOB : 0U)
+                 + (1 ? RCC_APB2Periph_GPIOA : 0U) + (1 ? RCC_APB2Periph_AFIO   : 0U);
 
   using namespace GPIO;
 
@@ -60,6 +60,7 @@ void SystemInit()
              PinMode::PushPull_LowSpeed<0>, LED1::tpin, LED2::tpin,
              PinMode::Input_PullUp, KEY::tpin,
              PinMode::AF_PushPull_HighSpeed, PA_8,
+             //PinMode::PushPull_HighSpeed<>, PC_0, PC_1,
              PinMode::Input, CfgCmd::AllUnusedPins>::pwr_config();
 
   SysTick->CMP = CPU_FREQ/100;

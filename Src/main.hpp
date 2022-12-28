@@ -2,6 +2,7 @@
 
 #define CH32V307
 #define CPU_FREQ 144'000'000
+#define WCH_INTERRUPT_FAST
 
 #include "CH32/ch32v30x.h"
 #include "QingKeV4.hpp"
@@ -31,3 +32,6 @@ extern USB_FS_CLASS USB_FS_OBJECT;
 using USB_HS_CLASS = USB_CDC<CH32_USB_HS_DEVICE, LED2>;
 extern USB_HS_CLASS USB_HS_OBJECT;
 #endif
+
+__interrupt SysTick_Handler();
+__interrupt EXTI0_IRQHandler();

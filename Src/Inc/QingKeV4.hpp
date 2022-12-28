@@ -248,18 +248,18 @@ namespace QingKeV4
   //   IRQn -Interrupt Numbers
   //   num - VTF Interrupt Numbers
   //   NewState - DISABLE or ENABLE
-  static inline void SetVTFIRQ(uint32_t addr, uint32_t IRQn, uint8_t num, bool NewState = true)
+  static inline void SetVTFIRQ(void (*addr)(), uint32_t IRQn, uint8_t num, bool NewState = true)
   {
     if (num > 3)  return;
     if (NewState)
     {
       NVIC->VTFIDR[num] = IRQn;
-      NVIC->VTFADDR[num] = ((addr & 0xF00FFFFE) | 0x1);
+      NVIC->VTFADDR[num] = (((uint32_t)addr & 0xF00FFFFE) | 0x1);
     }
     else
     {
       NVIC->VTFIDR[num] = IRQn;
-      NVIC->VTFADDR[num] = ((addr & 0xF00FFFFE) & (~0x1));
+      NVIC->VTFADDR[num] = (((uint32_t)addr & 0xF00FFFFE) & (~0x1));
     }
   }
 

@@ -81,6 +81,7 @@
     <AdditionalStartupCommands>
       <GDBPreStartupCommands />
       <GDBStartupCommands>
+        <string>mon halt</string>
         <string>mon reset init</string>
         <string>mon load_image d:\\!Projects\\STM32-Discovery\\CH32V307\\Firmware\\VGDB\\VisualGDB\\Debug\\CH32V307-Test.bin 0x20000000</string>
         <string>mon reg pc 0x20000000</string>
@@ -101,7 +102,7 @@
       </Features>
       <EnableSmartStepping>false</EnableSmartStepping>
       <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
-      <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
+      <ForceSingleThreadedMode>true</ForceSingleThreadedMode>
       <UseAppleExtensions>false</UseAppleExtensions>
       <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
       <MakeLogFile>false</MakeLogFile>
@@ -109,9 +110,9 @@
       <UseRelativePathsOnly>false</UseRelativePathsOnly>
       <ExitAction>Disconnect</ExitAction>
       <DisableDisassembly>false</DisableDisassembly>
-      <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
-      <StepIntoNewInstanceEntry>_start</StepIntoNewInstanceEntry>
-      <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
+      <ExamineMemoryWithXCommand>true</ExamineMemoryWithXCommand>
+      <StepIntoNewInstanceEntry />
+      <ExamineRegistersInRawFormat>false</ExamineRegistersInRawFormat>
       <DisableSignals>false</DisableSignals>
       <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
       <AsyncModeSupportsBreakpoints>true</AsyncModeSupportsBreakpoints>

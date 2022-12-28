@@ -47,7 +47,7 @@
       <CPPLanguageStandard>CPP1Z</CPPLanguageStandard>
       <AdditionalIncludeDirectories>;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG=1;__DEBUG_SRAM__;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Optimization>Os</Optimization>
+      <Optimization>O3</Optimization>
       <InlineFunctions>true</InlineFunctions>
       <CLanguageStandard>GNU18</CLanguageStandard>
       <DebugInformationFormat>Dwarf2</DebugInformationFormat>
