@@ -54,7 +54,20 @@ void SystemInit()
                  + (0 ? RCC_APB2Periph_GPIOD : 0U) + (1 ? RCC_APB2Periph_GPIOC  : 0U) + (1 ? RCC_APB2Periph_GPIOB : 0U)
                  + (1 ? RCC_APB2Periph_GPIOA : 0U) + (1 ? RCC_APB2Periph_AFIO   : 0U);
 
+
+
   using namespace GPIO;
+  using namespace REMAP;
+
+  riscv::__NOP();
+
+  Remap<
+          UART1_RM::CK_PA8_TX_PA9_RX_PA10_CTS_PA11_RTS_PA12,
+          UART8_RM::TX_PA14_RX_PA15,
+          CAN2_RM::RX_PB5_TX_PB6
+       >();
+
+  riscv::__NOP();
 
   ConfigList<PinMode::Input_PullUp, PA_14, PA_13,  // SWD
              PinMode::PushPull_LowSpeed<0>, LED1::tpin, LED2::tpin,

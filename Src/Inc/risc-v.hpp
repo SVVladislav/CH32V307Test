@@ -21,10 +21,10 @@ namespace riscv
   static inline void SetGP(uint_xlen_t* value)
   {
     __asm volatile (".option push;"
-    ".option norelax;"
-      "la gp, %0;"
-      ".option pop;"
-      : : "i" (value));
+                    ".option norelax;"
+                    "la gp, %0;"
+                    ".option pop;"
+                    : : "i" (value));
   }
 
   static inline void SetSP(uint_xlen_t* value)
