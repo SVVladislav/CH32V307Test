@@ -5,8 +5,6 @@ using namespace QingKeV4;
 TBlinkingLed<LED2, 50>  bl_led;
 KEY key;
 
-
-
 int main()
 {
   

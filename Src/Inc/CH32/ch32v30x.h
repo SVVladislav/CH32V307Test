@@ -130,9 +130,12 @@ typedef enum IRQn
 
 
 #include <stdint.h>
-#include "core_riscv.h"
+//#include "core_riscv.h"
 //#include "system_ch32v30x.h"
 
+typedef enum { ERROR = 0, SUCCESS = !ERROR } ErrorStatus;
+typedef enum { DISABLE = 0, ENABLE = !DISABLE } FunctionalState;
+typedef enum { RESET = 0, SET = !RESET } FlagStatus, ITStatus;
 
 /* Standard Peripheral Library old definitions (maintained for legacy purpose) */
 #define HSI_Value            HSI_VALUE 

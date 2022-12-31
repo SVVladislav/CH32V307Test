@@ -4,8 +4,9 @@
 #define CPU_FREQ 144'000'000
 #define WCH_INTERRUPT_FAST
 
-#include "CH32/ch32v30x.h"
 #include "QingKeV4.hpp"
+#include "CH32/ch32v30x.h"
+
 
 #include "SVVTL/template_lib.hpp"
 
