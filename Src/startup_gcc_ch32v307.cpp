@@ -230,19 +230,19 @@ void __attribute__((used, naked, noreturn)) Reset_Handler()
   using namespace riscv;
   using namespace QingKeV4;
 
+  // Enable floating point, interrupts disable
+  SetMSTATUS(MSTATUS_FS::Dirty, MSTATUS_MIE::Disable);
+
   // Set Pipeline, instruction prediction and ??? (no documents found)
   CSR<CSR_REGS::corecfgr>::write<0x1F>(0x1F);
 
-	SystemInit();
-
-  // Enable nested and hardware stack
+  // Enable nesting interrupts and hardware stack
   SetINTSYSCR(HWSTKOVEN::Enable, PMTCFG::_8, INESTEN::Enable, HWSTKEN::Enable);
 
   // vector table uses the absolute address of the interrupt function
   SetMTVEC(__vector_table - 2, EXCEPTIONS_MODE::VTABLE_ADDR);
 
-  // Enable floating point, interrupts disable
-  SetMSTATUS(MSTATUS_FS::Dirty, MSTATUS_MIE::Disable);
+  SystemInit();
 
   extern uint32_t _sidata[], _sdata[], _edata[], _sbss[], _ebss[];
 #ifndef __DEBUG_SRAM__
