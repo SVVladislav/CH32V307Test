@@ -83,7 +83,7 @@
       <GDBStartupCommands>
         <string>mon halt</string>
         <string>mon reset init</string>
-        <string>mon load_image d:\\!Projects\\STM32-Discovery\\CH32V307\\Firmware\\VGDB\\VisualGDB\\Debug\\CH32V307-Test.bin 0x20000000</string>
+        <string>mon load_image $(TargetPath.forwardslashes).bin 0x20000000</string>
         <string>mon reg pc 0x20000000</string>
       </GDBStartupCommands>
       <GDBFinalizationCommands />
@@ -110,7 +110,7 @@
       <UseRelativePathsOnly>false</UseRelativePathsOnly>
       <ExitAction>Disconnect</ExitAction>
       <DisableDisassembly>false</DisableDisassembly>
-      <ExamineMemoryWithXCommand>true</ExamineMemoryWithXCommand>
+      <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
       <StepIntoNewInstanceEntry />
       <ExamineRegistersInRawFormat>false</ExamineRegistersInRawFormat>
       <DisableSignals>false</DisableSignals>
@@ -119,8 +119,8 @@
       <TemporaryBreakConsolidationTimeout>0</TemporaryBreakConsolidationTimeout>
       <EnableNonStopMode>false</EnableNonStopMode>
       <MaxBreakpointLimit>0</MaxBreakpointLimit>
-      <EnableVerboseMode>false</EnableVerboseMode>
-      <EnablePrettyPrinters>false</EnablePrettyPrinters>
+      <EnableVerboseMode>true</EnableVerboseMode>
+      <EnablePrettyPrinters>true</EnablePrettyPrinters>
     </AdditionalGDBSettings>
     <DebugMethod>
       <ID>com.visualgdb.customstub</ID>
@@ -172,7 +172,7 @@
     <AutoDetectRTOS>false</AutoDetectRTOS>
     <SemihostingSupport>Disabled</SemihostingSupport>
     <SemihostingPollingDelay>0</SemihostingPollingDelay>
-    <StepIntoEntryPoint>true</StepIntoEntryPoint>
+    <StepIntoEntryPoint>false</StepIntoEntryPoint>
     <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>
     <ValidateEndOfStackAddress>false</ValidateEndOfStackAddress>
     <StopAtEntryPoint>false</StopAtEntryPoint>
