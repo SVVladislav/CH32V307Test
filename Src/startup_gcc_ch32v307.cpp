@@ -223,7 +223,8 @@ const intvec_elem __vector_table[] __attribute__((used, section(".vectors"))) =
   &DMA2_Channel11_IRQHandler
 };
 
-void Default_Handler() { for (;;); }
+
+  void Default_Handler() { for (;;); }
 
 void __attribute__((used, naked, noreturn)) Reset_Handler()
 {

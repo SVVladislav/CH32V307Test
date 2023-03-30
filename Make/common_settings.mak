@@ -22,6 +22,7 @@ CPP_SOURCES := \
 ../Src/main.cpp \
 ../Src/low_level_init.cpp \
 ../Src/startup_gcc_ch32v307.cpp \
+../Src/Inc/Hardware/USB/usb.cpp 
 
 # ASM sources
 ASM_SOURCES := \
