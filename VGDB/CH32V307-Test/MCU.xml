@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <EmbeddedProfile xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ToolchainID>d3a338e9-3c1a-4a24-8c87-2b9667bb3b2e</ToolchainID>
+  <ToolchainID>1503d9d5-4bea-464d-8ab9-cbe4aabcf93b</ToolchainID>
   <ToolchainVersion>
     <GCC>12.2.0</GCC>
     <GDB>(xPack</GDB>
@@ -22,7 +22,7 @@
       <CXXFLAGS />
       <LDFLAGS>-nostartfiles -specs=nano.specs -specs=nosys.specs</LDFLAGS>
       <ASFLAGS />
-      <COMMONFLAGS>-march=rv32imafc_zicsr_zifencei -mabi=ilp32f</COMMONFLAGS>
+      <COMMONFLAGS>-march=rv32imafcxw -mabi=ilp32f</COMMONFLAGS>
       <EnableLinkerGroups>true</EnableLinkerGroups>
     </CompilationFlags>
     <FLASHSize>196608</FLASHSize>

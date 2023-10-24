@@ -10,12 +10,12 @@
 	<ItemDefinitionGroup>
 		<ClCompile>
 			<AdditionalIncludeDirectories>%(ClCompile.AdditionalIncludeDirectories);../../Src/Inc</AdditionalIncludeDirectories>
-			<AdditionalOptions>-march=rv32imafc_zicsr_zifencei -mabi=ilp32f %(ClCompile.AdditionalOptions)</AdditionalOptions>
+			<AdditionalOptions>-march=rv32imafcxw -mabi=ilp32f %(ClCompile.AdditionalOptions)</AdditionalOptions>
 		</ClCompile>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup>
 		<Link>
-			<AdditionalOptions>-nostartfiles -specs=nano.specs -specs=nosys.specs -march=rv32imafc_zicsr_zifencei -mabi=ilp32f %(Link.AdditionalOptions)</AdditionalOptions>
+			<AdditionalOptions>-nostartfiles -specs=nano.specs -specs=nosys.specs -march=rv32imafcxw -mabi=ilp32f %(Link.AdditionalOptions)</AdditionalOptions>
 		</Link>
 	</ItemDefinitionGroup>
 </Project>

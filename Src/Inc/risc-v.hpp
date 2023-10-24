@@ -31,6 +31,11 @@ namespace riscv
   {
     __asm volatile ("la sp, %0;" : : "i" (value));
   }
+  
+  static inline void J(void(*value)())
+  {
+    __asm volatile ("j %0;" : : "i" (value));
+  }
 
   static inline void mret() { __asm volatile ("mret"); }
 

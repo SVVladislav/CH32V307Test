@@ -12,13 +12,13 @@ void SystemInit();
 void Reset_Handler();
 void Default_Handler();
 
-void __attribute__((used, naked, section(".init"))) _start(void)
+void __attribute__((used, naked, section(".init"))) _start()
 {
   extern uint32_t __global_pointer$;
   extern uint32_t _eusrstack;
   riscv::SetGP(&__global_pointer$);
   riscv::SetSP(&_eusrstack);
-  __asm volatile ("j Reset_Handler;");
+  riscv::J(Reset_Handler);
 }
 
 void NMI_Handler()                 __attribute__((weak, alias("Default_Handler")));
